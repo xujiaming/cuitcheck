@@ -1,0 +1,61 @@
+*{
+	margin: 0px; padding: 0px;}
+body{font:12px/1.5 arial,STHeiti,'Microsoft YaHei',\5b8b\4f53;word-wrap:break-word; color: #333;}
+a:link, a:visited{
+	text-decoration: none;
+}
+ul{
+	list-style: none; 
+}
+li{float: left; }
+input[type=text]{
+	border: 1px solid #D4D4D4; font-size: 14px; padding: 8px 5px 7px; width: 248px; height: 22px; border-radius: 3px; outline: 0;
+}
+.at-container{
+	background:#eee;position:relative;height:auto;}
+.at-header{
+	background:#3d444c;position:fixed;width:100%;z-index:101;left:0;margin-bottom:30px; height:56px;}
+.at-main{
+	width: 960px;margin: 0 auto; background-color: red;
+}
+.at-bar{
+	margin: 66px 0 0 0;width: 260px; float: left;}
+.at-content{
+	margin: 66px 0 0 0; float: left; width: 690px; margin-left: 10px;
+}
+.module-box{
+	border: 1px solid #e0e0e0;border-radius: 3px; background-color: #FFF; height: auto; height: 500px; margin-bottom: 160px;
+}
+.menubox{
+	background-color: #FFF;border-bottom: 2px solid #00bc9b; border-top: none; height: 42px;
+}
+.menu{
+	list-style: none; float: left; height: 42px; clear: both;
+}
+.mune li{
+	letter-spacing: 0;display: inline-block; margin-right: 1px;position: relative;
+}
+.sub-menu{
+	display: block; padding: 0 35px; height: 42px; font-size: 14px; text-align: center; color: #333; line-height: 42px;
+}
+.module-body{
+	padding: 20px;
+}
+.profile-caption{
+	padding-bottom: 5px; margin-bottom: 30px; border-bottom: 1px solid #D4D4D4; overflow: hidden;
+}
+.info-title{
+	font-weight: 700; font-size: 16px; margin-top: 13px; line-height: 22px;
+}
+.info-edit dl{
+	font-size: 14px; margin-bottom: 20px;
+}
+.info-edit dl dt{
+	float: left; width: 118px; text-align: right; line-height: 2.8; clear: both;
+}
+.info-edit input[type=text]{
+	margin-left: 30px;
+}
+.gender-edit{
+	color: #FFF; background-color: #BAC4C5;display: inline-block; width: 120px; text-align: center; border-radius: 3px; height: 40px; line-height: 40px; margin-left: 30px;
+}

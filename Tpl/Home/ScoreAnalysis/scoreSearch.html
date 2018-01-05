@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>学生成绩检索</title>
+    <link rel="stylesheet" href="__PUBLIC__/student/SemanticUI/semantic.min.css">
+    <layuicss/>
+    <link rel="stylesheet" href="__PUBLIC__/static/css/studentScore.css">
+
+</head>
+<body>
+<div class="body-main">
+    <div class="sign-diver" >
+        <h4 class="ui horizontal header divider">
+            <i class="bar chart icon"></i>
+            成绩检索
+        </h4>
+    </div>
+    <div class="main-content">
+        <fieldset class="layui-elem-field" style="min-height: 430px;">
+            <legend>面板</legend>
+            <div class="searchInput">
+                <form class="layui-form" id="searchForm" method="POST" action="{:U('ScoreAnalysis/findTheData')}">
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">学院：</label>
+                        <div class="layui-input-block" style="width: 240px;">
+                            <select name="dept_id" id="college" lay-filter="collegeS" required  lay-verify="required">
+                                <option value="">请选择学院</option>
+                                <volist name="college_list" id="co">
+                                    <option value="{$co['id']}">{$co.name}</option>
+                                </volist>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">学科：</label>
+                        <div class="layui-input-block" style="width: 240px;">
+                            <select name="course_id" id="course" lay-filter="courseS" lay-search required  lay-verify="required">
+                                <option value="">请选择学科</option>
+                                <!--<volist name="major_list" id="ma">-->
+                                <!--<option value="{$ma['id']}">{$ma.name}</option>-->
+                                <!--</volist>-->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">课程：</label>
+                        <div class="layui-input-block" style="width: 240px;">
+                            <select name="lession_id" id="lession" lay-filter="lessionS" lay-search required  lay-verify="required">
+                                <option value="">请选择课程</option>
+                                <!--<volist name="grade_list" id="gr">-->
+                                <!--<option value="{$gr['id']}">{$gr.name}</option>-->
+                                <!--</volist>-->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">年级：</label>
+                        <div class="layui-input-block" style="width: 240px;">
+                            <select name="grade_id" id="grade" lay-filter="gradeS" lay-search required  lay-verify="required">
+                                <option value="">请选择年级</option>
+                                <volist name="grade_list" id="gr">
+                                    <option value="{$gr['id']}">{$gr.name}</option>
+                                </volist>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item">
+                        <label class="layui-form-label">试卷：</label>
+                        <div class="layui-input-block" style="width: 240px;">
+                            <select name="paper_id" id="paper" lay-search>
+                                <option value="">请选择试卷</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="layui-form-item duoxuan">
+                        <label class="layui-form-label">行课班级：</label>
+                        <div class="layui-input-block" style="width: 500px;" id="courseclass_ids">
+
+                            <!--<input type="checkbox" name="" title="发呆" lay-skin="primary">-->
+                            <!--&lt;!&ndash;<select multiple="multiple" lay-verify="required" name="courseclass_ids" id="courseclass">&ndash;&gt;-->
+                                <!--&lt;!&ndash;<option value="">请选择行课班级</option>&ndash;&gt;-->
+                            <!--&lt;!&ndash;</select>&ndash;&gt;-->
+                        </div>
+                    </div>
+                    <div class="layui-form-item" style="margin-top: 100px;">
+                        <div class="layui-input-block">
+                            <button class="layui-btn" lay-submit="" lay-filter="searchNext">搜索</button>
+                            <!--<button type="reset" class="layui-btn layui-btn-primary">重置</button>-->
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </fieldset>
+    </div>
+
+</div>
+<layuijs/>
+<script>
+    var rooturl = "__ROOT__";
+    var linkselecturl = "{:U('ScoreAnalysis/linkSearch')}";
+    var searchUrl = "{:U('ScoreAnalysis/findTheData')}";
+</script>
+<script src="__PUBLIC__/static/js/layui-mz-min.js" charset="utf-8"></script>
+<script src="__PUBLIC__/static/js/scoreSearch.js"></script>
+</body>
+</html>

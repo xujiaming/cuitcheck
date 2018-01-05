@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>修改权限</title>
+	<layuicss/>
+	<style type="text/css">
+		.layui-form-select{
+			width: 80%;
+		}
+	</style>
+</head>
+<body>
+	
+	<div style="margin: 15px;">
+		<form class="layui-form">
+			<input type="hidden" name="testdb_id" value="{$testdb_id}">
+			<div class="layui-form-item">
+				<label class="layui-form-label">学院名称</label>
+				<div class="layui-input-block">
+					<eq name="type" value="add">
+						<select name="college_id" lay-verify="college_id">
+							<option value=""></option>
+							<volist name="collegeList" id="vo">
+							    <option value="{$vo.id}">{$vo.name}</option>
+							</volist>
+						</select>
+					<else/>
+						<select name="college_id" lay-verify="college_id" disabled>
+							<option value=""></option>
+							<volist name="collegeList" id="vo">
+								<eq name="vo.id" value="$testDBPer.college_id">
+							    	<option value="{$vo.id}" selected>{$vo.name}</option>
+							    <else/>
+							    	<option value="{$vo.id}">{$vo.name}</option>
+							    </eq>
+							</volist>
+						</select>
+					</eq>
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">权限类型</label>
+				<div class="layui-input-block">
+					<select name="permiss_level" lay-verify="permiss_level">
+						<option value=""></option>
+						<eq name="type" value="add">
+							<option value="1">仅可读</option>
+							<option value="2">可读可编辑</option>
+						<else/>
+							<eq name="testDBPer.permiss_level" value="1">
+								<option value="1" selected>仅可读</option>
+							<else/>
+								<option value="1">仅可读</option>
+							</eq>
+							<eq name="testDBPer.permiss_level" value="2">
+								<option value="2" selected>可读可编辑</option>
+							<else/>
+								<option value="2">可读可编辑</option>
+							</eq>
+						</eq>
+						
+					</select>
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<button class="layui-btn" lay-submit="" lay-filter="demo1">保存</button>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+			</div>
+
+		</form>
+	</div>
+	<layuijs/>
+	<script type="text/javascript">
+		var rooturl = "__ROOT__/";
+		var editurl = "";
+		if ('{$type}' == 'update'){
+			editurl = "{:U('Home/TestDBPermissionMgr/updateTestDBPer')}";
+		}else if ('{$type}' == 'add'){
+			editurl = "{:U('Home/TestDBPermissionMgr/addTestDBPer')}";
+		}
+	</script>
+	<script type="text/javascript" src="__PUBLIC__/static/js/editTestDBPer.js"></script>
+</body>
+</html>

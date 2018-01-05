@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>课程信息管理</title>
+<layuicss/>
+  <link rel="stylesheet" href="__PUBLIC__/static/css/global.css" media="all">
+  <link rel="stylesheet" href="__PUBLIC__/static/css/collegeList.css" />
+  <style type="text/css">
+    .layui-input-inline{
+      width: 100px;
+      height: 30px;
+      line-height: 30px;
+    }
+    .layui-input, .layui-select,
+    .layui-textarea {
+    background-color: #fff;
+    border: 1px solid #e6e6e6;
+    border-radius: 2px;
+    height: 30px;
+    line-height: 38px;
+}
+
+  </style>
+</head>
+	 <body>
+  <div class="admin-main">
+      <blockquote class="layui-elem-quote">
+          <form class="layui-form" style="display: inline-block;margin-left: 20px; min-height: inherit; vertical-align: bottom;">
+        <a href="javascript:;" class="layui-btn layui-btn-small add">
+          <i class="layui-icon">&#xe608;</i> 添加课程
+        </a>
+        <div class="layui-input-inline" style="">
+              <select name="col" id="col" lay-verify="" lay-filter="filter1">
+                  <option value="">选择学院</option>
+                   <volist name="collegelist" id="co">
+                      <option value="{$co['id']}">{$co.name}</option>
+                  </volist>
+              </select> 
+       </div>
+      <div class="layui-input-inline" style="margin-left: 20px;">
+              <select name="cou"  placeholder="Select Task Type" class="cou" lay-verify="" lay-filter="filter2">
+              <option value="">选择学科</option>  
+              </select> 
+       </div>
+        <div class="layui-input-block" style="display: inline-block; margin-left: 30px; min-height: inherit; vertical-align: bottom;">
+          <input type="text" name="keyword" id="keyword" required lay-verify="keyword" class="layui-input" autocomplete="off" placeholder="请输入搜索关键词" style="height: 30px; line-height: 30px;" value="{$keyword|default=''}">
+        </div>
+        <a href="javascript:;" class="layui-btn layui-btn-small" id="search">
+          <i class="layui-icon">&#xe615;</i> 搜索
+        </a>
+        <a href="javascript:;" class="layui-btn layui-btn-small" id="searchAll">
+          <i class="layui-icon">&#xe615;</i> 查看全部
+        </a>
+        </form>
+      </blockquote>
+      <fieldset class="layui-elem-field">
+        <legend>课程信息列表</legend>
+        <div class="layui-field-box">
+          <table class="site-table table-hover">
+            <thead>
+              <tr>
+                <th>课程名称</th>
+                <th>所属学科</th>
+                <th>所属学院</th>
+                <th>备注</th>
+                <th>操作</th>
+              </tr>
+            </thead>
+            <tbody>
+          <volist name="lessionlst" id="vo">
+              <tr>
+              <td>{$vo.name}</td>
+              <td>{$vo.course_name}</td>
+              <td>{$vo.college_name}</td>
+              <td><eq name="vo['remarks']" value="">无
+<else/>
+{$vo.remarks}
+</eq></td>
+              <td>
+                  <a href="javascript:;" data-id="{$vo.id}" class="layui-btn layui-btn-mini edit">编辑</a>
+                  <a href="javascript:;" data-id="{$vo.id}" data-opt="del" class="layui-btn layui-btn-danger layui-btn-mini del">删除</a>
+                </td>
+              </tr>
+      </volist>
+            </tbody>
+          </table>
+        </div>
+      </fieldset>
+      <div  style="position: fixed;bottom: 0;width: 100%;border-bottom: 1px solid #ddd;left: 0px;">
+        <div id="page" class="page">
+      </div>
+      </div>
+  </div>
+<layuijs/>
+<script type="text/javascript">
+  var editurl = "{:U('Home/lessionMgr/editlession')}";
+  var listurl = "{:U('Home/LessionMgr/lessionList')}";
+  var deleteurl = "{:U('Home/lessionMgr/deletelession')}";
+  var rooturl = "__ROOT__/";
+  var getcourse="{:U('Home/lessionMgr/getcourselist')}";
+    var pages = {$pages};
+  var curr = {$requestPage};
+layui.use(['layer','form','jquery','laypage','laydate'],function(){
+var layer = layui.layer,
+  form = layui.form(),
+  laypage = layui.laypage,
+  laydate = layui.laydate,
+  $ = layui.jquery;
+    // alert(gradekey);
+  $('.add').on('click', function(){  
+    layer.open({
+      type: 2,
+      title: ['添加课程信息', 'text-align:center;'],
+      content: editurl+"?type=add_lession",
+      area:['450px', '400px'],  //宽高
+      resize: false,    //是否允许拉伸
+      scrollbar: false,
+      end: function(){
+        location.reload();
+      }
+    });
+  });
+   form.on('select(filter1)', function(data){
+        var college_id = data.value;
+        $.ajax({
+            url:getcourse,
+            type:"POST",
+            data: {'college_id':college_id},
+            dataType:"json",
+            success: function (data) {
+                /*清空隐藏域缓存值，和无效隐藏域*/
+                $("input[name='cou']").val("");
+                $("input[name='undefined']").remove();
+
+                //将option框清空,避免for循环重复
+                $(".cou").find("option").each(function(){
+                    if(!$(this).val() == "")
+                        $(this).remove();
+                });
+
+                var cou = data.cou;
+                // alert(cou);
+                //动态添加option
+                for (var i = cou.length - 1; i >= 0; i--) {
+                  // alert(cou[i]);
+                    $(".cou").append("<option value="+cou[i].id+">"+cou[i].name+"</option>");
+                }
+                // 更新选择框
+                form.render('select');
+            }
+        });
+          // alert(222);
+   });
+    laypage({
+    cont: 'page',
+    pages: pages ,//总页数
+    // skin:'#AF0000',
+    skip:true, //显示跳页
+    groups: 5, //连续显示分页数
+    curr: curr,//获得当前页码
+    jump: function(obj, first) {
+      //得到了当前页，用于向服务端请求对应数据
+      var curr = obj.curr;
+      if(!first) {
+        window.location.href=listurl+"?requestPage="+curr;
+      }
+    }
+  });
+  //点击搜索按钮的事件处理
+  $('#search').on('click', function() {
+    // alert(3330);
+    var keyword = $("#keyword").val();
+    var course=$("#cou").val();
+    var college=$("#col").val();
+    var searchword = "";
+
+    if (keyword == "" && course == "" && college ==""){
+      layer.msg('请先选择或输入内容!', {time: 1000});
+    }else{
+      searchword=searchword+"&college="+college+"&course="+course;
+      window.location.href=listurl+"?keyword="+keyword+searchword;
+    }
+  });
+
+  $('#searchAll').on('click', function(){
+    window.location.href="{:U('Home/lessionMgr/lessionList')}";
+  });
+  //编辑按钮功能
+  $('.edit').on('click', function(){
+    var id = $(this).data('id');
+    layer.open({
+      type: 2,
+      title: ['修改课程信息', 'text-align:center;'],
+      content: editurl+"?type=update&id="+id,
+      area:['550px', '400px'],  //宽高
+      resize: false,    //是否允许拉伸
+      scrollbar: false,
+      end: function(){
+        location.reload();
+      }
+    });
+    
+  });
+  //删除功能
+ $('.del').on('click', function(){
+
+    var id = $(this).data('id');
+    layer.confirm('确定删除该课程?', {
+      btn: ['确定', '取消']
+    }, function(){
+      $.ajax({
+        url: deleteurl,
+        type: 'POST',
+        dataType: 'json',
+        data: {'id': id},
+        error: function(request){
+          layer.msg("请求服务器超时", {time: 1000, icon: 5});
+        },
+        success: function(data){
+          if (data.success){
+            layer.msg(data.msg, {
+              time: 1000
+            }, function(){
+              location.reload();
+            });
+          }else{
+            layer.msg(data.msg, {
+              time: 1000
+            });
+          }
+        }
+      });
+      
+    });
+  });
+
+});
+</script>
+</body>
+</html>
+

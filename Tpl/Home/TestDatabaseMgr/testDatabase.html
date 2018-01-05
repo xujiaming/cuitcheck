@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>题库管理</title>
+	<layuicss/>
+	<link rel="stylesheet" href="__PUBLIC__/static/css/global.css" media="all">
+	<style type="text/css">
+		.layui-unselect{
+			height: 30px;
+			line-height: 30px;
+			width: 100px;
+		}
+		.site-table tbody tr td {text-align: center;}
+		.site-table tbody tr td .layui-btn+.layui-btn{margin-left: 0px;}
+		.admin-table-page {position: fixed;z-index: 19940201;bottom: 0;width: 100%;background-color: #eee;border-bottom: 1px solid #ddd;left: 0px;}
+		.admin-table-page .page{padding-left:20px;}
+		.admin-table-page .page .layui-laypage {margin: 6px 0 0 0;}
+		.table-hover tbody tr:hover{ background-color: #EEEEEE; }
+	</style>
+</head>
+<body>
+	<div class="admin-main">
+
+		<blockquote class="layui-elem-quote">
+			<a href="#" class="layui-btn layui-btn-small add">
+				<i class="layui-icon">&#xe608;</i> 添加题库
+			</a>
+			<div class="layui-form layui-input-inline">
+				
+				<div class="layui-input-inline">
+					<label class="layui-form-label" style="width: auto; padding: 5px 15px;">题库类型</label>
+						<div class="layui-input-inline">
+							<select name="testtype_id" lay-verify="" id="testtype_id">
+								<option value=""></option>
+								<volist name="typeList" id="vo">
+									<eq name="vo.value" value="$testtype_id">
+								    	<option value="{$vo.value}" selected>{$vo.label}</option>
+								    <else/>
+								    	<option value="{$vo.value}">{$vo.label}</option>
+								    </eq>
+								</volist>
+							</select>
+						</div>
+				</div>
+
+				<div class="layui-input-inline">
+					<label class="layui-form-label" style="width: auto; padding: 5px 15px;">所属学科</label>
+						<div class="layui-input-inline">
+							<select name="course_id" lay-verify="" id="course_id" lay-filter="course">
+								<option value=""></option>
+								<volist name="courseList" id="vo">
+									<eq name="vo.id" value="$course_id">
+								    	<option value="{$vo.id}" selected>{$vo.name}</option>
+								    <else/>
+								    	<option value="{$vo.id}">{$vo.name}</option>
+								    </eq>
+								</volist>
+							</select>
+						</div>
+				</div>
+				<div class="layui-input-inline">
+					<label class="layui-form-label" style="width: auto; padding: 5px 15px;">所属课程</label>
+						<div class="layui-input-inline">
+							<select class="lession_id" name="lession_id" lay-verify="" id="lession_id">
+								<option value=""></option>
+								<volist name="lessionList" id="vo">
+									<eq name="vo.id" value="$lession_id">
+								    	<option value="{$vo.id}" selected>{$vo.name}</option>
+								    <else/>
+								    	<option value="{$vo.id}">{$vo.name}</option>
+								    </eq>
+								</volist>
+							</select>
+						</div>
+				</div>
+				<div class="layui-input-inline">
+					<label class="layui-form-label" style="width: auto; padding: 5px 15px;">创建学院</label>
+						<div class="layui-input-inline">
+							<select name="college_id" lay-verify="" id="college_id">
+								<option value=""></option>
+								<volist name="collegeList" id="vo">
+								    <eq name="vo.id" value="$college_id">
+								    	<option value="{$vo.id}" selected>{$vo.name}</option>
+								    <else/>
+								    	<option value="{$vo.id}">{$vo.name}</option>
+								    </eq>
+								</volist>
+							</select>
+						</div>
+				</div>
+				<div class="layui-input-inline">
+					<label class="layui-form-label" style="width: auto; padding: 5px 15px;">题库状态</label>
+						<div class="layui-input-inline">
+							<select name="status" lay-verify="" id="status">
+								<option value=""></option>
+								<switch name="status" >
+								    <case value="1">
+								    	<option value="1" selected>公开</option>
+										<option value="0">未公开</option>
+								    </case>
+								    <case value="0">
+								    	<option value="1">公开</option>
+										<option value="0" selected>未公开</option>
+								    </case>
+									<default />
+										<option value="1">公开</option>
+										<option value="0">未公开</option>
+								</switch>
+							</select>
+						</div>
+				</div>
+			</div>
+			<div class="layui-input-block" style="display: inline-block; margin-left: 30px; min-height: inherit; vertical-align: bottom;">
+				<input type="text" name="keyword" id="keyword" required lay-verify="keyword" class="layui-input" autocomplete="off" placeholder="请输入搜索关键词" value="{$keyword}" style="height:30px; line-height:30px;">
+			</div>
+			<a href="javascript:;" class="layui-btn layui-btn-small" id="search">
+				<i class="layui-icon">&#xe615;</i> 搜索
+			</a>
+			<a href="javascript:;" class="layui-btn layui-btn-small" id="searchAll">
+				<i class="layui-icon">&#xe615;</i> 查看全部
+			</a>
+		</blockquote>
+		<fieldset class="layui-elem-field">
+				<legend>题库列表</legend>
+				<div class="layui-field-box">
+					<table class="site-table table-hover">
+						<thead>
+							<tr>
+								<th>题库编号</th>
+								<th>题库类型</th>
+								<th>题库名称</th>
+								<th>所属学科</th>
+								<th>所属课程</th>
+								<th>创建学院</th>
+								<th>创建时间</th>
+								<th>题库状态</th>
+								<th>备注</th>
+								<th>操作</th>
+							</tr>
+						</thead>
+						<tbody>
+							<volist name="testDBList" id="vo">
+							<tr>
+								<td>{$vo.id}</td>
+								<td>{$vo.testtype}</td>
+								<td>{$vo.name}</td>
+								<td>{$vo.coursename}</td>
+								<td>{$vo.lessionname}</td>
+								<td>{$vo.collegename}</td>
+								<td>{$vo.create_date}</td>
+								<td>
+									<eq name="vo.status" value="1">
+										<span class="layui-btn layui-btn-mini" style="cursor:auto; ">公开</span>
+									<else/>
+										<span class="layui-btn layui-btn-danger layui-btn-mini" style="cursor:auto; ">未公开</span>
+									</eq>
+								</td>
+								<td>{$vo.comment|default='无'}</td>
+								<eq name="vo.type" value="1">
+									<td>
+										<a href="javascript:;" data-id="{$vo.id}" class="layui-btn layui-btn-normal layui-btn-mini detail">详情</a>
+									</td>
+								<else/>
+									<td>
+										<a href="javascript:;" data-id="{$vo.id}"  class="layui-btn layui-btn-normal layui-btn-mini detail">详情</a>
+										<a href="javascript:;" data-id="{$vo.id}" class="layui-btn layui-btn-mini edit">编辑</a>
+										<a href="javascript:;" data-id="{$vo.id}" data-opt="del" class="layui-btn layui-btn-danger layui-btn-mini del">删除</a>
+									</td>
+								</eq>
+							</tr>
+							</volist>
+						</tbody>
+					</table>
+
+				</div>
+			</fieldset>
+			<div class="admin-table-page">
+				<div id="page" class="page">
+				</div>
+			</div>
+			<layuijs/>
+			<script type="text/javascript">
+				var listurl = "{:U('Home/TestDatabaseMgr/testDatabaseList')}";
+				var editurl = "{:U('Home/TestDatabaseMgr/editTestDB')}";
+				var deleteurl = "{:U('Home/TestDatabaseMgr/deleteTestDB')}";
+				var detailurl = "{:U('Home/TestDatabaseMgr/detailTestDB')}";
+				var getLession = "{:U('Home/TestDatabaseMgr/getLessionByCourse')}";
+				var rooturl = "__ROOT__/";
+				var pages = {$pages};
+				var curr = {$requestPage};
+				var keyword = "{$keyword}";
+				var testtype_id = "{$testtype_id}";
+				var course_id = "{$course_id}";
+				var college_id = "{$college_id}";
+				var status = "{$status}";
+			</script>
+			<script type="text/javascript" src="__PUBLIC__/static/js/testDatabase.js"></script>
+	</div>
+</body>
+</html>

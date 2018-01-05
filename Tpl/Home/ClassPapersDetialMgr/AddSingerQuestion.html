@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>添加单个题目</title>
+	<layuicss/>
+	<link rel="stylesheet" href="__PUBLIC__/static/css/rwdgrid.min.css">
+    <link rel="stylesheet" href="__PUBLIC__/static/css/collegeList.css" />
+    <link rel="stylesheet" href="__PUBLIC__/static/css/global.css" media="all">
+    <style>
+        .layui-input{
+            height: 30px;
+        }
+        .my-input .layui-input{
+            height: 38px;
+        }
+        .my-input .layui-form-label{
+            width: 90px;
+        }
+        .courseList{
+            margin-top: 10px;
+        }
+        .layui-form-select{
+            width: 70%; /*     调整select的宽度*/
+        }
+        .add-titile {
+            padding: 5px 0px;
+            width: 80px;
+        }
+        .add-titile:after {
+            padding: 5px 0px;
+            width: 80px;
+            border: dashed 1px red;
+        }
+        .layui-form-select {
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+	
+	<div class="admin-main layui-form">
+		<form class="my-form" action="">
+        <blockquote class="layui-elem-quote">
+            <div class=" layui-input-block" style="display: inline-block; margin-left: 10px; vertical-align: bottom;">
+                <div class="layui-form-pane courseList">
+                    <label class="layui-form-label" style="padding: 4px 1px;">选择题库</label>
+                    <div class="layui-input-inline ">
+                        <select name="database_id" id="database_id" class="database_id" lay-verify="" lay-filter="filter1">
+                            <option value="" selected="">选择题库</option>
+                            <volist name="DbList" id="col">
+                                <option value="{$col.id}">{$col.name}</option>
+                            </volist>
+                        </select>
+                    </div>
+                </div>
+            </div>
+            <div class=" layui-input-block" style="display: inline-block; margin-left: 10px; vertical-align: bottom;">
+                <div class="layui-form-pane courseList">
+                    <label class="layui-form-label" style="padding: 4px 1px;">选择章节</label>
+                    <div class="layui-input-inline ">
+                        <select id="chapter_id" name="chapter_id" multiple="multiple" class="chapter_id"  lay-filter="filter2">
+                            <option value="" >选择章节</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <a href="javascript:;" class="layui-btn layui-btn-small" id="query" style="background-color: #1E9FFF;display: inline-block">
+                查询
+            </a>
+            <!--<a href="javascript:;" style="display: inline-block; margin-top: 5px; margin-left: 2px; min-height: inherit; vertical-align: bottom;" class="layui-btn layui-btn-small" id="searchAll">-->
+            <!--<i class="layui-icon">&#xe615;</i> 生成-->
+            <!--</a>-->
+        </blockquote>
+
+        <fieldset class="layui-elem-field">
+                <!--<legend>学院列表</legend>-->
+                <div class="layui-field-box">
+                    <table class="site-table table-hover">
+                        <colgroup>
+                            <col width="26%">
+                            <col width="10%">
+                            <col width="10%">
+                            <col width="10%">
+                            <col width="10%">
+                            <col width="10%">
+                            <col width="15%">
+                            <col width="10%">
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th>题干</th>
+                            <th>所属章节</th>
+                            <th>所属题库</th>
+                            <th>题目难度</th>
+                            <th>题目类型</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <present name="questionlist">
+                        <volist name="questionlist" id="vo">
+                            <tr>                    
+                                <td>{$vo.content}</td>
+                                <td>{$vo.chapter}</td>
+                                <td>{$vo.name}</td>
+                                <td><switch name="vo.level">
+                                	<case value="1">简单</case>
+                                	<case value="2">普通</case>
+                                	<case value="3">困难</case>
+                                </switch></td>
+                                <td><switch name="vo.type">
+                                	<case value="1">选择</case>
+                                	<case value="2">判断</case>
+                                	<case value="3">填空</case>
+                                	<case value="4">编程</case>
+                                </switch></td>
+                                <td>
+                                    <a href="javascript:;" data-id="{$vo.id}" class="layui-btn layui-btn-mini addSinger">添加</a>
+                                </td>
+                            </tr>
+                        </volist>
+                        <else/>
+	                        <tr><td colspan="6">暂没有数据，或该题库数据已被添加。请选择条件后再查询</td></tr>
+                        </present>
+                        </tbody>
+                    </table>
+
+                </div>
+            </fieldset>
+    </form>
+	</div>
+
+</body>
+<layuijs/>
+<script type="text/javascript" src="__PUBLIC__/static/js/layui-mz-min.js"></script>
+<script type="text/javascript">
+	var rooturl = "__ROOT__/";
+	var getbd = "{:U('Home/ClassPapersDetialMgr/getList')}";
+    var getlession="{:U('Home/ClassPapersDetialMgr/getlessionlist')}";
+	var queryurl = "{:U('Home/ClassPapersDetialMgr/queryList')}";
+	var addSingerurl = "{:U('Home/ClassPapersDetialMgr/addSinger')}";
+	var college_id="{$college_id}";
+	var testpaper_id = "{$testpaper_id}";
+</script>
+<script type="text/javascript" src="__PUBLIC__/static/js/addSingerQuestion.js"></script>
+</html>

@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>能力考查系统</title>
+<meta name="description" content="针对java考试和c语言考核、学生平时练习和评测、收集学生成绩以及学习情况的收集和分析的一个在线考核系统">
+<meta name="keywords" content="个人主页,编程练习">
+<link rel="stylesheet" href="__PUBLIC__/student/css/detail.css">
+<link rel="stylesheet" href="__PUBLIC__/student/css/common.css">
+    <layuicss/>
+    <script ></script>
+</head>
+<body>
+<include file='Public:header' />
+<button class="layui-btn" id="back" name="back" style="margin-top: 20px; float: left; margin-bottom: 20px;" onclick="javascrtpt:window.history.back(-1)"><i class="layui-icon">&#xe603;</i>返回主页</button>
+<div class="container">
+    <div class="content">
+    	<div class="detail">
+        	<div class="paper_title">
+        		<h3><span>●</span>&nbsp;&nbsp;<span id="paper_name"></span></h3>
+            </div>
+            <div class="paper_info">
+            	<div class="paper_info_img">
+                	<img src="__PUBLIC__/student/images/note.png">
+                </div>
+                <div class="paper_info_text">
+                	<p class="item_label">
+                    	<b>试卷类型：</b>
+                        <span id="type"></span>
+                    </p>
+                    <p class="item_label">
+                    	<b>所属学院：</b>
+                        <span id="college_name"></span>
+                    </p>
+                    <p class="item_label">
+                    	<b>完成时间：</b>
+                        <span class="d_star" id="create_time">120</span>分钟
+                    </p>
+                    <p class="item_label">
+                    	<b>及格成绩：</b>
+                        <span class="d_star" id="pass_score"></span>分
+                    </p>
+                    <p class="item_label">
+                    	<b>总分：</b>
+                        <span id="full_score"></span>分
+                    </p>
+                </div>
+                <div class="paper_info_warn">
+                	<p>1、某试卷的某某说明某某注意事项，某某不能做的事，关于试卷的说明吧之类或者其他说明之类的吧就是这样嗯对。</p>
+                    <p>2、未经网站或作者的同意不得转载，否则构成侵权，本网站或作者保留诉诸法律的权利。</p>
+					<p>3、如发现本网站载有侵犯您著作权的侵权信息，可依法向我们提出权利申请，申请方式点击查看。</p>
+                </div>
+                <div class="paper_info_btn">
+                	<button value="" id="start_test" data-id="" data-course="">开始做题</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="__PUBLIC__/student/js/jquery-3.1.1.min.js" type="text/javascript"></script>
+<script type="text/javascript">
+    var id = "{$id}";
+    var courseclass_id = "{$courseclass_id}";
+    var testPage = "{:U('Student/TestPaper/paper')}";
+    var detailInfoUrl = "{:U('Student/TestPaper/getThePaper_info')}";
+</script>
+
+<script>
+    $(function() {
+        $.ajax({
+            url: detailInfoUrl,
+            dataType: 'json',
+            data: {'id': id, 'courseclass_id': courseclass_id},
+            beforeSend: function () {
+            },
+            success: paperInfo1,
+        });
+        function paperInfo1(data) {
+            var json = eval(data);
+            if (json.status == 1) {
+                var singlePaper = json.info;
+                //为试卷信息追加内容
+                document.getElementById("paper_name").innerText = singlePaper[0].name;
+                document.getElementById("type").innerText = singlePaper[0].typename;
+                document.getElementById("college_name").innerText = singlePaper[0].collegename;
+                document.getElementById("pass_score").innerText = singlePaper[0].pass_score;
+                document.getElementById("full_score").innerText = singlePaper[0].full_score;
+                //为开始做题按钮赋值id
+                document.getElementById("start_test").dataset.id = singlePaper[0].id;
+                document.getElementById("start_test").dataset.course = singlePaper[0].courseclass_id;
+            }
+        }
+
+        // 扩展post提交数据, 并进行跳转
+        $.extend({
+            StandardPost: function (url, args) {
+                var body = $(document.body),
+                        form = $("<form method='post'></form>"),
+                        input;
+                form.attr({"action": url});
+                $.each(args, function (key, value) {
+                    input = $("<input type='hidden'>");
+                    input.attr({"name": key});
+                    input.val(value);
+                    form.append(input);
+                });
+
+                form.appendTo(document.body);
+                form.submit();
+                document.body.removeChild(form[0]);
+            }
+        });
+
+        $('#start_test').on('click', function () {
+            var paper_id = $(this).data('id');          // 试卷id
+            var course_id = $(this).data('course');     // 班级id
+
+            $.StandardPost(testPage, {'paper_id': paper_id, 'course_id': course_id});
+
+        });
+    });
+</script>
+</body>
+</html>

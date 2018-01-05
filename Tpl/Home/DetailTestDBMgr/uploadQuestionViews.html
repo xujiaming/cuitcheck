@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title></title>
+	<layuicss/>
+	<style type="text/css">
+		.warn-table {
+			margin-top:30px;
+			margin-left: 10px;
+			margin-right: 10px;
+		}
+	</style>
+</head>
+<body>
+	<div class="" id="">
+		<div class="warn-table">
+			<blockquote class="layui-elem-quote layui-quote-nm">
+					<table align="center" cellspacing="50%" style="line-height: 28px;font-size: 16px;color: #404040;">
+						<th>
+							<td colspan="2" style="text-align: center;font-size: 19px;">*&nbsp;注意事项</td>
+						</th>
+						<tr>
+							<td>1.&nbsp;</td>
+							<td>一个问题及答案请按照一列进行排版.</td>
+						</tr>
+						<tr>
+							<td>2.&nbsp;</td>
+							<td>表格必须连续,中间不能断开.</td>
+						</tr>
+						<tr>
+							<td>3.&nbsp;</td>
+							<td>难度分为1~3,其中3表示最大难度,1表示最小难度,如果不确定请选择中间值2</td>
+						</tr>
+						<tr>
+							<td>4.&nbsp;</td>
+							<td>题目类型分为1~3.其中1代表选择题,2代表判断题,3代表填空题</td>
+						</tr>
+						<tr>
+							<td>5.&nbsp;</td>
+							<td>导入的题目只存在当前题库中!</td>
+						</tr>
+						<tr>
+							<td>6.&nbsp;</td>
+							<td>知识点暂不能进行导入,请在题目导入完成后手动选择.</td>
+						</tr>
+					</table>
+				</blockquote>
+				<div align="center" style="margin-top: 40px;">
+					<button class="layui-btn" onclick="download();"><i class="layui-icon">&#xe61e;下载模板</i></button>
+					<input type="file" class="layui-upload-file" name="question_import" id="question_import">
+					
+				</div>
+		</div>
+	</div>
+	<layuijs/>
+	
+	<script type="text/javascript">
+		var importurl = "{:U('Home/DetailTestDBMgr/uploadQuestion')}";
+		var testdb_id = "{$testdb_id}";
+		// alert(testdb_id);
+		function download() {
+			window.open("{:U('Home/DetailTestDBMgr/questionTemple')}");
+		}
+	</script>
+	<script type="text/javascript">
+		layui.use(['upload','layer'], function() {
+			var layer = layui.layer;
+			$ = layui.jquery;
+
+
+	        layui.upload({
+			url: importurl,
+			ext: 'xls||xlsx',
+			type: 'file',
+			method: 'post',
+			before:function(input) {
+				// 上传前添加题库id
+				var add  = "<input hidden='text' name='testdb_id' value="+testdb_id+">";
+				 $('.layui-upload-button form').append(add);
+				// $('.layui-upload-button form').prop('action', importurl+'?testdb_id='+testdb_id);
+				layer.msg('玩命上传中！');
+			},
+			success: function(res){
+				if(res['status'] === false){
+					layer.msg(res['msg'], {time: 3000,icon: 2});
+				}else{
+					layer.alert('恭喜，导入成功!',{
+						icon: 1,
+						skin: 'layer-ext-moon',
+						ttitle: '提示',
+					},function() {
+						var index = parent.layer.getFrameIndex(window.name);
+                        	parent.layer.close(index);
+					});				
+					}			
+	  			}
+			});
+
+
+        });
+
+	</script>
+
+</body>
+</html>

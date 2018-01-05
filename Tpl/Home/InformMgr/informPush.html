@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <layuicss/>
+</head>
+<body>
+<form class="layui-form" enctype="multipart/form-data">
+<input type="hidden" name="dept_id" id="dept_id" value="{$deptid.dept_id}">
+  <div class="layui-form-item">
+    <label class="layui-form-label">标题</label>
+    <div class="layui-input-block">
+      <input type="text" style="width: 90%;" id="title" name="title" required  lay-verify="required" placeholder="请输入标题" autocomplete="off" class="layui-input" value="{$informedit.title|default=''}">
+    </div>
+  </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">附件</label>
+    <div class="layui-input-inline">
+      <input type="file" id="filename" name="filename" value="" size="50" class="layui-upload-file">
+    </div>
+    </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label">发送对象</label>
+    <div class="layui-input-block">
+      <input type="radio" id="sendtype" name="sendtype" value="1" title="学生" checked>
+      <input type="radio" id="sendtype" name="sendtype" value="2" title="老师">
+      <input type="radio" id="sendtype" name="sendtype" value="3" title="全体师生">
+    </div>
+  </div>
+  <div class="layui-form-item layui-form-text">
+   <label class="layui-form-label">通知内容</label>
+  <div class="layui-input-block">
+    <textarea id="content" name="content" class="layui-textarea" style="width:900px;height:300px;"><pre></pre></textarea>
+  </div>
+  </div>
+  <div class="layui-form-item">
+    <div class="layui-input-block">
+    <center>
+      <button class="layui-btn" lay-submit lay-filter="push_btn" style="margin-top: 40px;">发布</button>
+      </center>
+    </div>
+  </div>
+</form>
+  <layuijs/>
+</body>
+</html>
+<script charset="utf-8" src="__PUBLIC__/static/kindeditor/kindeditor.js"></script>
+<script charset="utf-8" src="__PUBLIC__/static/kindeditor/lang/zh_CN.js"></script>
+<!-- <script>
+        KindEditor.ready(function(K) {
+                window.editor = K.create('#content',{
+                cssPath : '__PUBLIC__/static/kindeditor/plugins/code/prettify.css',
+                uploadJson : '__PUBLIC__/static/kindeditor/php/upload_json.php',
+                fileManagerJson : '__PUBLIC__/static/kindeditor/php/file_manager_json.php',
+                allowFileManager : true,
+          });
+        });
+</script> -->
+    <!-- 配置文件 -->
+<script type="text/javascript">
+    KindEditor.ready(function(K) {
+         window.editor = K.create('#content',{
+           cssPath : '__PUBLIC__/static/kindeditor/plugins/code/prettify.css',
+            uploadJson : '__PUBLIC__/static/kindeditor/php/upload_json.php',
+            fileManagerJson : '__PUBLIC__/static/kindeditor/php/file_manager_json.php',
+           allowFileManager : true,
+            afterCreate : function(){ 
+              this.sync();   
+           },
+            afterChange: function(){ 
+              this.sync();   
+           },
+           afterBlur : function(){this.sync();}
+          });
+  });
+</script>
+<script type="text/javascript">
+    var rooturl = "__ROOT__/";
+</script>
+<script type="text/javascript">
+   var fileurl="";
+   var filename="";
+ layui.use(['upload','layer','form','jquery'],function(){
+  var layer = layui.layer,
+  form = layui.form(),
+  $ = layui.jquery;
+  layui.upload({
+      method:'post',
+      url: "{:U('Home/InformMgr/attachment')}",
+      ext: 'xls||xlsx|txt|doc|docx',
+      title: '上传附件',
+    success: function(res){
+         if(res.code == 1){
+            layer.msg(res.msg);
+          }else {
+            layer.msg(res.msg);
+    
+            fileurl = res.data.src;
+            filename=res.name.name;
+            // window.location.reload();
+         }
+      }
+    });
+
+  form.on('submit(push_btn)', function(data){
+    if(editor.text()==""){
+          layer.msg('通知内容内容不能为空!',{icon:5});
+          return false;
+    }else{
+    $.ajax({
+      url: "{:U('Home/InformMgr/informAdd')}",
+      type: 'POST',
+      data:
+      {
+        title:$("#title").val(),
+        content:$("#content").val(),
+        sendtype:$('input:radio[name="sendtype"]:checked').val(),
+        dept_id:$("#dept_id").val(),
+        file_url:fileurl,
+        file_name:filename,
+     },
+      error: function(request){
+        layer.msg("请求服务器超时", {time: 1000, icon: 5});
+      },
+      success: function(data){
+        if (data.success){
+          layer.msg('提交成功', {
+            time: 1000
+          }, function(){
+            parent.location.href="{:U('Home/InformMgr/informList')}";
+          });
+        }else{
+          layer.msg(data.msg, {
+            time: 1000
+          });
+        }
+      }
+    });
+      }
+    return false;
+  });
+  });
+</script>

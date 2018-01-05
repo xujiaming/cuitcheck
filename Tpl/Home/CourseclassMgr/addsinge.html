@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <link rel="stylesheet" href="__PUBLIC__/static/layui/css/layui.css" media="all">
+</head>
+<body>
+  <div style="margin: 20px;">
+<form class="layui-form">
+<input type="hidden" name="course_id" value="{$courseclassid}">
+      <div class="layui-form-item">
+    <label class="layui-form-label  lable-box">学号:</label>
+    <div class="layui-input-block">
+      <input type="text" name="account" id="account" required  lay-verify="required" placeholder="请输入学号" autocomplete="off" class="layui-input"  style="width:300px;" >
+   </div>
+  </div>
+   <div class="layui-form-item btn">
+    <div class="layui-input-block">
+      <button class="layui-btn" lay-submit lay-filter="add_btn">保存</button>
+      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+  </div>
+</form>
+</div>
+<script type="text/javascript">
+  var editurl = "{:U('Home/courseclassMgr/updatesinge')}";
+  var rooturl = "__ROOT__/";
+</script>
+<layuijs/>
+</body>
+</html>
+<script type="text/javascript">
+layui.use(['form','laydate'], function(){
+  var form = layui.form(),
+   laydate = layui.laydate,
+  $ = layui.jquery;
+  form.render(); //更新全部
+  form.render('select');
+  form.on('submit(add_btn)', function(data) {
+    $.ajax({
+      url: editurl,
+      type: 'POST',
+      data: data.field,
+      error: function(request){
+        layer.msg("请求服务器超时", {time: 1000, icon: 5});
+      },
+      success: function(data){
+        if (data.success){
+          layer.msg('添加成功');
+        }else{
+          layer.msg(data.msg, {
+            time: 1000,icon:5
+          });
+        }
+      }
+    });
+    
+    return false;
+  });
+});
+</script>
+

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title></title>
+	<layuicss/>
+	<style type="text/css">
+		.warn-table {
+			margin-top:30px;
+			margin-left: 10px;
+			margin-right: 10px;
+		}
+	</style>
+</head>
+<body>
+	<div class="" id="">
+		<div class="warn-table">
+			<blockquote class="layui-elem-quote layui-quote-nm">
+					<table align="center" cellspacing="50%" style="line-height: 28px;font-size: 16px;color: #404040;">
+						<th>
+							<td colspan="2" style="text-align: center;font-size: 19px;">*&nbsp;注意事项</td>
+						</th>
+						<tr>
+							<td>1.&nbsp;</td>
+							<td>如果不清楚模板类型，请先下载模板</td>
+						</tr>
+						<tr>
+							<td>2.&nbsp;</td>
+							<td>请勿修改模板中的字段包括顺序,是否启用1代表启用，0代表禁用</td>
+						</tr>
+						<tr>
+							<td>3.&nbsp;</td>
+							<td>请确保所有的必填项不为空（*为必填项）</td>
+						</tr>
+						<tr>
+							<td>4.&nbsp;</td>
+							<td>请注意导入的角色编号，1为超级管理员，2为系统管理员,3为学院管理员，4为教师</td>
+						</tr>
+						<tr>
+							<td>5.&nbsp;</td>
+							<td>请注意你所选择的上传文件时单sheet文件</td>
+						</tr>
+						<tr>
+							<td>6.&nbsp;</td>
+							<td>上传出现错误信息后只需要修改错误信息再次上传即可！</td>
+						</tr>
+					</table>
+				</blockquote>
+				<div align="center" style="margin-top: 40px;">
+					<button class="layui-btn" onclick="download();"><i class="layui-icon">&#xe61e;下载模板</i></button>
+					<input type="file" class="layui-upload-file" name="stu_import" id="stu_import">
+				</div>
+		</div>
+	</div>
+	<layuijs/>
+	<script type="text/javascript">
+		function download() {
+			window.open("{:U('Home/SysuserManage/SysUserTemplate')}");
+		}
+		var importurl = "{:U('Home/SysuserManage/importFileSysUser')}";
+		var rooturl = "__ROOT__/";
+		var afterimporturl = "{:U('Home/SysuserManage/sysUserList')}";
+		layui.use(['upload','layer'], function() {
+			var layer = layui.layer;
+	        layui.upload({
+			url: importurl,
+			ext: 'xls||xlsx',
+			type: 'file',
+			method: 'post',
+			before:function(input) {
+				layer.msg('玩命上传中！');
+			},
+			success: function(res){
+				if(res['code'] == 2){
+					layer.open({
+						type: 1, //type为1才能为页面层
+						title: '导入结果',
+						skin: 'layui-layer-rim', //加上边框
+		  			  	area: ['500px', '340px'], //宽高
+		  			  	content: res['msg'],	  			  	
+					});
+				}else{
+					layer.alert('恭喜，导入成功!',{
+						icon: 1,
+						skin: 'layer-ext-moon',
+						ttitle: '提示',
+					},function() {
+						parent.location.href = afterimporturl;
+						layer.close(index);
+					});				
+					}			
+	  			}
+			});
+        });
+ 		
+	</script>
+	<script type="text/javascript" src="__PUBLIC__/static/js/studentMgr.js"></script>
+</body>
+</html>

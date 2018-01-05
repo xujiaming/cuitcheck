@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>编辑题目</title>
+    <layuicss/>
+    <link rel="stylesheet" href="__PUBLIC__/static/css/global.css" media="all">
+    <icons/>
+</head>
+<body>
+
+<style type="text/css">
+
+
+/*.left{
+ padding-top: 50px;
+ float: left;
+ clear: both;
+}
+.right{
+  float: right;
+  clear: both;
+  padding-top: 50px;
+  padding-right: 160px;
+}*/
+.layui-form-item::after {
+    /*clear: none;*/
+}
+.layui-form-item {
+    width: 30%;
+    clear: none;
+    margin-bottom: 15px;
+}
+
+.input_narrow{
+      margin-left: 0;
+}
+/*.layui-input-block, .layui-input-inline {
+    display: inline-block;
+}*/
+
+
+</style>
+
+<div class="admin-main">
+
+    <form class="layui-form">
+
+
+            <input type="hidden" name="testdb_id" value="{$testdb_id}" />
+            <input type="hidden" name="del_flag" value="1">
+            <input type="hidden" name="id" value="{$id}">
+
+
+            <div class="layui-input-block" style="display: inline-block; margin-left:20px;">
+            <label class="layui-form-label">题目类型</label>
+              <div class="layui-input-inline">
+                <select id="type" name="type" lay-verify='required' lay-filter="type">
+                    <option value="" selected=""></option>
+                    <option value="1" <neq name="question.type" value="1">disabled</neq> <eq name="question.type" value="1">selected</eq> >选择</option>
+                    <option value="2" <neq name="question.type" value="2">disabled</neq> <eq name="question.type" value="2">selected</eq> >判断</option>
+                    <option value="3" <neq name="question.type" value="3">disabled</neq> <eq name="question.type" value="3">selected</eq> >填空</option>
+                </select>
+              </div>
+            </div>
+            
+
+            <div class="layui-input-block input_narrow" style="display: inline-block;">
+            <label class="layui-form-label">题目难度</label>
+             <div class="layui-input-inline">
+                <select id="level" name="level" lay-verify='required'>
+                    <option value="" selected=""></option>
+                    <option value="1" <eq name="question.level" value="1">selected</eq> >简单</option>
+                    <option value="2" <eq name="question.level" value="2">selected</eq> >普通</option>
+                    <option value="3" <eq name="question.level" value="3">selected</eq> >困难</option>
+                </select>
+              </div>
+            </div>
+    
+
+
+            <div class="layui-input-block input_narrow" style="display: inline-block;">
+            <label class="layui-form-label">相关知识点</label>
+            <div class="layui-input-inline">
+                  <select id="knowledge" name="knowledgeIds" multiple="multiple">
+                      <option value="" selected=""></option>
+                      <volist name="knowledge" id="vo">
+                      <option value="{$vo['id']}"  <in name="vo.id" value="$question.knowledge_ids">selected</in> >{$vo.name}</option>
+                      </volist>
+                  </select>
+            </div>
+            </div>
+
+
+
+
+            <div class="layui-form-item" style="width: 100%; padding-top: 150px;">
+                <label class="layui-form-label">题干</label>
+                <div class="layui-input-block">
+                    <textarea id="content" style="display: none;">{$question.content}</textarea>
+                    <input type="hidden" value="" name="content" id="getContent" />
+                </div>
+            </div>
+
+            <!-- 选择题 -->
+          <div class="type_1" style="display: none">
+            <div class="layui-form-item">
+               <label class="layui-form-label">答案A</label>
+                <div class="layui-input-block">
+                    <input type="text" name="answer1" placeholder="请输入A答案" autocomplete="off" class="answer1 layui-input" <eq name="question.type" value="1">value="{$answer['0']['content']}"</eq> >
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+              <label class="layui-form-label">答案B</label>
+                <div class="layui-input-block">
+                    <input type="text" name="answer2" placeholder="请输入B答案" autocomplete="off" class="answer2 layui-input" <eq name="question.type" value="1">value="{$answer['1']['content']}"</eq> >
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+              <label class="layui-form-label">答案C</label>
+                <div class="layui-input-block">
+                    <input type="text" name="answer3" placeholder="请输入C答案" autocomplete="off" class="answer3 layui-input" <eq name="question.type" value="1">value="{$answer['2']['content']}"</eq> >
+                </div>
+            </div>
+
+            <div class="layui-form-item">
+              <label class="layui-form-label">答案D</label>
+                <div class="layui-input-block">
+                    <input type="text" name="answer4" placeholder="请输入D答案" autocomplete="off" class="answer4 layui-input" <eq name="question.type" value="1">value="{$answer['3']['content']}"</eq> >
+                </div>
+            </div>
+
+              <div class="layui-form-item">
+                <label class="layui-form-label">选择正确答案</label>
+                <div class="layui-input-block">
+                  <input type="radio" name="select" value="1" title="A" <eq name="question.type" value="1"><eq name="answer[0]['is_true']" value="1">checked</eq></eq> >
+                  <input type="radio" name="select" value="2" title="B" <eq name="question.type" value="1"><eq name="answer[1]['is_true']" value="1">checked</eq></eq> >
+                  <input type="radio" name="select" value="3" title="C" <eq name="question.type" value="1"><eq name="answer[2]['is_true']" value="1">checked</eq></eq> >
+                  <input type="radio" name="select" value="4" title="D" <eq name="question.type" value="1"><eq name="answer[3]['is_true']" value="1">checked</eq></eq> >
+                </div>
+              </div>
+          </div>
+
+            <!-- 判断题 -->
+            <div class="type_2" style="display: none">
+              
+              <div class="layui-form-item">
+                <label class="layui-form-label">该答案是否正确</label>
+                <div class="layui-input-block">
+                  <input type="radio" name="answerjudge" value="true"  title="正确" <eq name="question.type" value="2"><eq name="answer[0]['is_true']" value="1">checked</eq></eq> >
+                  <input type="radio" name="answerjudge" value="false" title="错误" <eq name="question.type" value="2"><eq name="answer[1]['is_true']" value="1">checked</eq></eq> >
+                </div>
+              </div>
+
+            </div>
+
+            <!-- 填空题 -->
+            <div class="type_3" style="display: none">
+              <div class="layui-form-item">
+                <label class="layui-form-label">答案</label>
+                  <div class="layui-input-block">
+                      <input type="text" name="answertian" placeholder="请输入答案" autocomplete="off" class="answer layui-input" <eq name="question.type" value="3">value="{$answer[0]['content']}"</eq> >
+                      <div class="layui-form-mid layui-word-aux">多个答案请用 "()" 隔开.如"(java)(c++)"</div>
+                  </div>
+              </div>
+            </div>
+
+            <div class="layui-form-item">
+              <div class="layui-input-block">
+                  <button class="layui-btn addOne" data-type="content" lay-submit lay-filter="addOne">修改</button>
+                  <button type="reset" class="layui-btn layui-btn-primary reset">重置</button>
+              </div>
+            </div>
+
+            
+          
+    </form>
+    
+
+
+</div>
+<layuijs/>
+<script src="__PUBLIC__/static/js/layui-mz-min.js"></script>
+<script type="text/javascript">
+
+  var rooturl = "__ROOT__/";
+  var uploads = "{:U('Home/DetailTestDBMgr/uploads')}";
+  var editAction = "{:U('Home/DetailTestDBMgr/editAction')}";
+
+  var testdb_id = "{$testdb_id}";
+  var init_type = "{$question.type}";
+
+</script>
+<script type="text/javascript">
+
+layui.use([ 'layer','layedit','form','element'], function() {
+    var $ = layui.jquery,
+        layer = layui.layer,
+        form = layui.form(),
+        element = layui.element();
+        // 多选项
+        layui.selMeltiple($);
+        // 编辑器
+        var layedit = layui.layedit;
+
+        var index = layedit.build('content',{
+          height:250,
+          tool: ['strong','italic','del','underline','|','left', 'center', 'right', '|', 'image'],
+            uploadImage: {
+               url: uploads //接口url
+              ,type: 'post' //默认post
+            }
+        });;
+        // 获得文本内容
+        var active = {
+          content: function(){
+            // alert(layedit.getContent(index)); //获取编辑器内容
+            // 将文本赋给hidden进行表单提交
+            $("#getContent").val(layedit.getContent(index));
+          }
+        };
+
+        $('.addOne').on('click', function(){
+          var type = $(this).data('type');
+          active[type] ? active[type].call(this) : '';
+        });
+
+
+        // 答案内容显示
+        $(".type_"+init_type).css('display', '');
+        $('.type_'+init_type+" :text").attr("lay-verify","required");
+       
+
+        // 题目类型联动
+        form.on('select(type)', function(data){
+          var type_id = data.value;
+
+          for (var i = 1; i <= 3; i++) {
+            // 初始化
+            $(".type_"+i).css('display', 'none');
+
+            // 当前选择的类型
+            if(type_id == i) {
+              $(".type_"+type_id).css('display', '');
+              $('.type_'+type_id+" :text").attr("lay-verify","required");
+            } else {
+              // 其他类型
+              $(".type_"+i).css('display', 'none');
+              $('.type_'+i+" :text").attr("lay-verify","none");
+              $('.type_'+i+" :text").val("");
+              $('.type_'+i+" :radio").removeAttr("checked");
+
+            }
+          }
+        });
+
+        // 表单提交
+        form.on('submit(addOne)', function(data){
+          var da = data.field;
+          console.log(da);
+          
+
+            layer.confirm('确定修改该题目?', {
+                btn: ['确定', '取消']
+            }, function(){
+                $.ajax({
+                    url:editAction,
+                    type:"POST",
+                    data:data.field,
+                    beforeSend: function(){
+                        //
+                    },
+                    success:function(data2)
+                    {
+                        if(data2.status){
+                            // 关闭当前窗口
+                            layer.msg(data2.msg, {time: 3000,icon: 1},function(){
+                              var index = parent.layer.getFrameIndex(window.name);
+                              parent.layer.close(index);
+                            });
+                        }else {
+                            layer.msg(data2.msg, {time: 3000,icon: 2});
+                        }
+                    },
+                    error: function(){
+                        layer.msg('请求服务器超时', {time: 3000,icon: 2});
+                    }
+                });
+            },function(){});
+
+
+          return false; //阻止表单跳转。如果需要表单跳转，去掉这段即可。
+        });
+
+
+        // 重置按钮
+        $(".reset").click(function(){
+          location.reload();
+        });
+
+
+
+
+
+
+
+});
+</script>
+
+
+</body>
+</html>

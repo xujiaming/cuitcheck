@@ -1,0 +1,12 @@
+.content{
+	background-color:#FFF; width:960px; margin:0 auto; margin-top:30px; padding-bottom:30px;}
+.gg_header{
+	width:960px; height:52px; border-bottom:1px solid #DDD; line-height:52px; }
+.gg_header h3{
+	font-size:20px; text-align:center; color:#00B188; display:block; }
+.gg_body{
+	width:900px; margin:0 auto;}
+.gg_body p{
+	text-indent:24px; padding:10px;}
+.content span{
+	display:block; text-align:center; margin-top:5px;}

@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>考试记录</title>
+    <layuicss/>
+    <link rel="stylesheet" href="__PUBLIC__/static/css/global.css" media="all">
+    <link rel="stylesheet" href="__PUBLIC__/static/css/collegeList.css" />
+    <style>
+        .layui-input{
+            height: 30px;
+        }
+        .layui-form-select{
+            width: 80%; /*     调整select的宽度*/
+        }
+
+    </style>
+</head>
+<body>
+<div class="admin-main">
+    <blockquote class="layui-elem-quote">
+        <form class="layui-form" style="height:30px;display: inline-block;margin-left: 6px; min-height: inherit; vertical-align: bottom;">
+            <div class=" layui-input-block" style="display: inline-block; margin-left: 5px; vertical-align: bottom;">
+                <div class="layui-form-pane">
+                    <label class="layui-form-label" style="padding: 4px 1px;">所属学院</label>
+                    <div class="layui-input-inline">
+                        <select name="col"  required lay-filter="" id="colid">
+                            <option value=""></option>
+                            <volist name="college" id="co">
+                                <option value="{$co.id}" <eq name="co.id" value="$college_id">selected="selected"</eq>>{$co.name}</option>
+                            </volist>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class=" layui-input-block" style="display: inline-block; margin-left: 5px; vertical-align: bottom;">
+                <div class="layui-form-pane">
+                    <label class="layui-form-label" style="padding: 4px 1px;">试卷类型</label>
+                    <div class="layui-input-inline">
+                        <select class="select_paper" name="type" required lay-filter="" id="typeid">
+                            <option value=""></option>
+                            <volist name="testType" id="tt">
+                                <option value="{$tt.value}" <eq name="tt.value" value="$type_id">selected="selected"</eq>>{$tt.label}</option>
+                            </volist>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+            <div class="layui-input-block" style="display: inline-block; margin-left: 30px; min-height: inherit;vertical-align: top;">
+                <input type="text" name="keyword" id="keyword" required lay-verify="keyword" class="layui-input" autocomplete="off" placeholder="请输入搜索关键词" style="height: 30px; line-height: 30px;" value="{$keyword|default=''}">
+            </div>
+            <a href="javascript:;" class="layui-btn layui-btn-small" id="search" style="vertical-align: top;">
+                <i class="layui-icon">&#xe615;</i> 搜索
+            </a>
+            <a href="javascript:;" class="layui-btn layui-btn-small" id="searchAll" style="margin-left: 2px;vertical-align: top;">
+                <i class="layui-icon">&#xe615;</i> 查看全部
+            </a>
+        </form>
+    </blockquote>
+    <fieldset class="layui-elem-field">
+        <legend>考试记录</legend>
+        <div class="layui-field-box">
+            <table class="site-table table-hover">
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>试卷名称</th>
+                    <th>类型</th>
+                    <th>所属学院</th>
+                    <th>出题人</th>
+                    <th>生成时间</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <notempty name="paperList">
+                <volist name="paperList" id="pl" key="k">
+                    <tr>
+                        <td>{$k}</td>
+                        <td>{$pl.name}</td>
+                        <td>{$pl.typename}</td>
+                        <td>{$pl.collegename}</td>
+                        <td>{$pl.create_by}</td>
+                        <td>{$pl.create_date}</td>
+                        <td><a href="javascript:;" data-id="{$pl.id}" class="layui-btn layui-btn-mini detail">查看详情</a></td>
+                    </tr>
+                </volist>
+                    <else/>
+                    <tr><td colspan="6">暂时未找到数据！</td></tr>
+                </notempty>
+                </tbody>
+            </table>
+        </div>
+    </fieldset>
+</div>
+<div>
+    <div class="" style="margin-left: 38%;position: static;bottom: 0;">
+        <div id="page" ></div>
+    </div>
+</div>
+
+
+
+<layuijs/>
+<script>
+    var rooturl = "__ROOT__/";
+    var listurl = "{:U('Home/ScoreAnalysis/testRecordList')}";
+    var keyword = "{$keyword}";
+    var pages = "{$pages}";
+    var curr = "{$requestPage}";
+    var college_id = "{$college_id}";
+    var type_id = "{$type_id}";
+    var detailurl = "{:U('Home/ScoreAnalysis/detailPaper')}";
+</script>
+<script type="text/javascript" src="__PUBLIC__/static/js/testRecord.js"></script>
+</body>
+</html>

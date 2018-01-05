@@ -1,0 +1,141 @@
+<!--delete-->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>试卷详情</title>
+    <layuicss/>
+    <link rel="stylesheet" href="__PUBLIC__/static/css/global.css" media="all">
+    <link rel="stylesheet" href="__PUBLIC__/static/css/collegeList.css" />
+</head>
+<body>
+<div class="admin-main">
+    <div>
+        <fieldset class="layui-elem-field">
+            <div class="layui-field-box">
+                <blockquote class="layui-elem-quote layui-quote-nm">
+                    <button class="layui-btn layui-btn-small layui-btn-normal returnLast" style="margin-left:2px;margin-right: 20px;">
+                        <i class="layui-icon">&#xe603;</i>返回上级
+                    </button>
+                    您当前所查看的学生是：<span style="margin-left: 5px;font-size: 1.1em;font-weight: bold">{$stuName}</span>
+                    <form class="layui-form" style="height:30px;display: inline-block; min-height: inherit; vertical-align: bottom;float: right;">
+                        <a href="javascript:;" class="layui-btn layui-btn-small export" style="margin-left: 10px;vertical-align: top;background-color: #3b83c0">
+                            <i class="layui-icon">&#xe601;</i> 导出该学生成绩
+                        </a>
+                        <div class="layui-input-block" style="display: inline-block; margin-left: 30px; min-height: inherit;vertical-align: top;">
+                            <input type="text" name="keyword" id="keyword" required lay-verify="keyword" class="layui-input" autocomplete="off" placeholder="请输入搜索关键词（学号或姓名）" style="width:300px;height: 30px; line-height: 30px;" value="{$keyword|default=''}">
+                        </div>
+                        <a href="javascript:;" class="layui-btn layui-btn-small" id="search" style="vertical-align: top;">
+                            <i class="layui-icon">&#xe615;</i> 搜索
+                        </a>
+                        <a href="javascript:;" class="layui-btn layui-btn-small" id="searchAll" style="margin-left: 2px;vertical-align: top;">
+                            <i class="layui-icon">&#xe615;</i> 查看全部
+                        </a>
+                    </form>
+                </blockquote>
+            </div>
+            <div class="layui-field-box">
+                <table class="site-table table-hover">
+                    <thead>
+                    <tr>
+                        <th>序号</th>
+                        <th>学号</th>
+                        <th>姓名</th>
+                        <th>性别</th>
+                        <th>行政班级</th>
+                        <th>测试试卷</th>
+                        <th>分数</th>
+                        <th>记录时间</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <notempty name="studentScore">
+                    <volist name="studentScore" id="ss" key="k">
+                        <tr>
+                            <td>{$k}</td>
+                            <td>{$ss.account}</td>
+                            <td>{$ss.stuname}</td>
+                            <td><if condition="$ss['sex'] eq 0">女</if>
+                                <if condition="$ss['sex'] eq 1">男</if></td>
+                            <td>{$ss.classname}</td>
+                            <td>{$ss.papername}</td>
+                            <td>{$ss.score}</td>
+                            <td>{$ss.create_date}</td>
+                            <!--<td><a href="javascript:;" data-id="{$sl.id}" class="layui-btn layui-btn-mini detail">查看详情</a></td>-->
+                        </tr>
+                    </volist>
+                        <else/>
+                        <tr><td colspan="8">暂时未找到数据！</td></tr>
+                    </notempty>
+                    </tbody>
+                </table>
+            </div>
+        </fieldset>
+    </div>
+    <div class="" style="margin-left: 38%;position: static;bottom: 0;">
+        <div id="page" ></div>
+    </div>
+</div>
+<layuijs/>
+<script>
+    var rooturl = "__ROOT__/";
+    var listurl = "{:U('Home/ScoreAnalysis/getTheStudentScore')}";
+    var returnurl = "{:U('Home/ScoreAnalysis/classStudent')}";
+    //var detailurl = "{:U('Home/ScoreAnalysis/getTheStudentScore')}";
+    var class_id = "{$class_id}";
+    var stuId = "{$stuId}";
+    var pages = "{$pages}";
+    var curr = "{$requestPage}";
+    var exporturl = "{:U('Home/ScoreAnalysis/exportScore')}";
+    //var paperId = "{$paperId}";
+</script>
+<script>
+    layui.config({
+        base: rooturl+'Public/static/js/'
+    }).use(['layer','laypage'], function() {
+        var layer = layui.layer,
+                laypage = layui.laypage,
+                $ = layui.jquery;
+
+        laypage({
+            cont: 'page',
+            pages: pages,
+            groups: 5,
+            //skip: true, //是否开启跳页
+            curr: curr,
+            jump: function(obj, first) {
+                var curr = obj.curr;
+                var keyword = $('#keyword').val();
+                if(!first) {
+                    window.location.href = listurl+"?requestPage="+curr+"&stuId="+stuId+"&keyword="+keyword;
+                }
+            }
+        });
+
+        //点击搜索按钮的事件处理
+        $('#search').on('click', function() {
+            var keyword = $('#keyword').val();
+            if (keyword == ""){
+                layer.msg('请输入或选择内容');
+            }
+            window.location.href=listurl+"?keyword="+keyword+"&stuId="+stuId;
+
+        });
+        $('#searchAll').on('click', function(){
+            window.location.href=listurl+"?stuId="+stuId;
+        });
+        $('.returnLast').on('click', function() {
+            window.location.href = returnurl+"?id="+class_id;
+        });
+        $('.export').on('click', function() {
+            var index3 = layer.confirm('确定导出成绩吗?', {
+                btn: ['确定', '取消']
+            }, function(){
+                window.open(exporturl+"?stuId="+stuId);
+                layer.close(index3);
+            });
+        });
+    });
+</script>
+</body>
+</html>

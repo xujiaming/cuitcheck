@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<title></title>
+	<meta name="renderer" content="webkit">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+	<meta name="apple-mobile-web-app-status-bar-style" content="black">
+	<meta name="apple-mobile-web-app-capable" content="yes">
+	<meta name="format-detection" content="telephone=no">
+	<link rel="stylesheet" href="__PUBLIC__/static/layui/css/layui.css" media="all" />
+	<style type="text/css">
+		/*.layui-input {
+			height: 30px;
+			width: 140px;
+		}
+*/	</style>
+</head>
+<body>
+	<div style="margin: 15px;">
+		<form class="layui-form">
+			<input type="hidden" name="id" value="{$major.id|default=''}">	
+			<div class="layui-form-item">
+				<label class="layui-form-label">选择学院</label>
+				<div class="layui-input-block" style="width: 288px;">
+		        	<select name="dept_id"  placeholder="Select Task Type" id="demo-col" lay-filter="collegeSS">
+		        	<option value="">选择学院</option>
+		         	<volist name="collegeList" id="col">
+		         		<option value="{$col.id}" <eq name="option" value="true">disabled</eq> 
+		         		<eq name="col.id" value="$college_id">selected="selected"</eq> >{$col.name}</option>
+		         	</volist>
+		        	</select> 
+	        	</div>
+	        </div>
+			
+			<div class="layui-form-item">
+				<label class="layui-form-label">专业名称</label>
+				<div class="layui-input-block">
+					<input type="text" name="name" lay-verify="name" autocomplete="off" placeholder="请输入专业名称" class="layui-input" style="width:80%;" value="{$major.name|default=''}">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">备注</label>
+				<div class="layui-input-block" >
+					<input type="text" name="comment" lay-verify="comment" autocomplete="off" placeholder="请输入备注（可为空）" class="layui-input" style="width:80%;" value="{$major.comment|default=''}">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<button class="layui-btn" lay-submit="" lay-filter="demo1">保存</button>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+			</div>
+
+		</form>
+	</div>
+</body>
+<layuijs/>
+<script type="text/javascript">
+	var editurl = "";
+	if ('{$type}' == 'update'){
+		editurl = "{:U('Home/MajorMgr/updateMajor')}";
+	}else if ('{$type}' == 'add'){
+		editurl = "{:U('Home/MajorMgr/addMajor')}";
+	}
+	var rooturl = "__ROOT__/";
+</script>
+<script type="text/javascript" src="__PUBLIC__/static/js/editMajor.js"></script>
+</html>

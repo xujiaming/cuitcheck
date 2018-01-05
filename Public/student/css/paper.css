@@ -1,0 +1,97 @@
+
+.clear{
+	clear:both;
+}
+
+
+.box{
+	background: #eee;
+    position: relative;
+    height: auto;
+    min-height: 100%;
+}
+
+
+.paper_box{
+        margin: 0 auto;
+    width: 960px;
+    padding-top: 70px;
+    padding-bottom: 250px;
+}
+
+.paper_topic{
+	background: #FFF;
+	position: relative;
+}
+
+.subject_progress {
+	padding: 10px 200px 10px 30px;
+    background: #232c31;
+    border-radius: 4px 4px 0 0;
+    position: relative;
+    white-space: nowrap;
+}
+
+
+
+ .subject_main{
+ 	background: #FFF;
+    padding: 20px;
+    letter-spacing: 2px;
+ }
+
+
+.ui.form .grouped.fields {
+    margin: 0 0 4em !important;
+}
+
+
+ .subject_action {
+ 	float: right;
+ 	padding-right: 20px;
+
+ }
+
+
+ .time{
+ 	text-align: center;
+ 	position: fixed;
+ 	top: 180px;
+ 	right:-1px;
+ 	width: 175px;
+ 	overflow: hidden;
+ }
+
+ .showTime{
+    width: 78px;
+    height: 36px;
+ }
+
+ .showTime:hover{
+    width: 130px;
+ }
+
+ .showTime .text{
+    position: absolute;
+    white-space: nowrap;
+    top: auto;
+    left: 54px;
+    opacity: 0;
+    transition: 0.3s opacity 0.3s;
+ }
+
+.showTime:hover .text{
+    opacity: 1;
+ }
+
+
+.answer_sheet{
+	position: fixed;
+	top: 180px;
+	left: 16px;
+    width: 155px;
+ }
+
+ .ui.animated.button {
+    margin: 5px;
+}

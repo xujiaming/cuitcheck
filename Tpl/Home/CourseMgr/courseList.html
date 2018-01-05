@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>学科管理</title>
+	<layuicss/>
+	<link rel="stylesheet" href="__PUBLIC__/static/css/global.css" media="all">
+	<link rel="stylesheet" href="__PUBLIC__/static/css/courseList.css" media="all">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/static/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="__PUBLIC__/static/css/main.css">
+</head>
+<body>
+
+	<div class="admin-main">
+		<blockquote class="layui-elem-quote">
+			<a href="javascript:;" class="layui-btn layui-btn-small add">
+				<i class="layui-icon">&#xe608;</i> 添加学科
+			</a>
+		</blockquote>
+		<volist name="courseList" id="vo">
+			<div class="row">
+				<div class="col-md-12">
+					<section class="panel">
+						<div class="panel-heading"><i class="fa fa-bell-o"></i>
+							{$vo.name}<span class="badge" style="background-color:#FF3333;">{$vo.course|count}</span>
+							<a href="javascript:;" class="pull-right panel-toggle"><i class="layui-icon">&#xe619;</i></a>
+						</div>
+						<div class="panel-body">
+							<volist name="vo.course" id="vc">
+								<div class="course-box" data-id="{$vc.id}">
+									<div class="symbol">
+										<i class="layui-icon" style="color: #fff;font-size: 3em;">&#xe60a;</i>
+									</div>
+									<div class="value">
+										<span>{$vc.name}</span>
+									</div>
+								</div>
+							</volist>
+						</div>
+					</section>
+				</div>
+			</div>
+		</volist>
+
+
+		<div>
+		</div>
+	</div>
+	
+<layuijs/>
+<script type="text/javascript">
+	var rooturl = "__ROOT__/";
+	var editurl = "{:U('Home/CourseMgr/editCourse')}";
+</script>
+<script type="text/javascript" src="__PUBLIC__/static/js/courseList.js"></script>
+
+</body>
+</html>

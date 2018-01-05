@@ -1,0 +1,176 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <layuicss/>
+    <style type="text/css">
+        .layui-form-select{
+            width: 80%;
+        }
+    </style>
+</head>
+<body>
+<div style="margin: 15px;">
+    <form class="layui-form" action="">
+        <div class="layui-form-item">
+            <label class="layui-form-label">试卷名</label>
+            <div class="layui-input-block">
+                <input type="text" name="name" lay-verify="must" autocomplete="off" placeholder="请输入题库名称" class="layui-input" style="width:80%;" value="{$testdb.name|default=''}">
+            </div>
+        </div>
+
+        <if condition="$role eq 1">
+        <div class="layui-form-item">
+            <label class="layui-form-label">选择学院</label>
+            <div class="layui-input-block">
+                <select name="college_id" lay-verify="required" lay-filter="collegebtn">
+                    <option value=""></option>
+                    <volist name="collegeList" id="vo">
+                        <option value="{$vo.id}">{$vo.name}</option>
+                    </volist>
+                </select>
+            </div>
+        </div>
+        </if>
+          <if condition="$role eq 1">
+      <div class="layui-form-item">
+            <label class="layui-form-label">所属课程</label>
+            <div class="layui-input-block">
+                <select name="lession_id" id="lession_id" lay-verify="required">
+                    <option value=""></option>
+                </select>
+            </div>
+        </div> 
+        <else />
+        <div class="layui-form-item">
+            <label class="layui-form-label">所属课程</label>
+            <div class="layui-input-block">
+                <select name="lession_id" id="lession_id" lay-verify="required">
+                    <option value=""></option>
+                 <volist name="lessionlist" id="vo">
+                     <option value="{$vo.id}">{$vo.name}</option>
+                </volist>
+                </select>
+            </div>
+        </div> 
+          </if>
+        <div class="layui-form-item">
+            <label class="layui-form-label">类型</label>
+            <div class="layui-input-block">
+                <select name="type_id" lay-verify="required">
+                    <option value=""></option>
+                    <volist name="paperTypeList" id="vo">
+                        <option value="{$vo.value}">{$vo.label}</option>
+                    </volist>
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">是否启用</label>
+            <div class="layui-input-block">
+                <input name="status" lay-skin="switch" lay-text="ON|OFF" type="checkbox" value="1" checked>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">备注</label>
+            <div class="layui-input-block" >
+                <input type="text" name="comment" lay-verify="" autocomplete="off" placeholder="请输入备注（可为空）" class="layui-input" style="width:80%;" value="{$testdb.comment|default=''}">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <div class="layui-input-block">
+                <a class="layui-btn" lay-submit="" lay-filter="save">保存</a>
+                <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+            </div>
+        </div>
+
+    </form>
+</div>
+<layuijs/>
+<script type="text/javascript">
+    //    var rooturl = "__ROOT__/";
+    //    var editurl = "";
+    //    if ('{$type}' == 'update'){
+    //        editurl = "{:U('Home/TestDatabaseMgr/updateTestDB')}";
+    //    }else if ('{$type}' == 'add'){
+          var addurl = "{:U('Home/ClassPapersCreateMgr/addPaper')}";
+        var getlessionurl = "{:U('Home/courseclassMgr/getlession')}";
+    //    }
+</script>
+<script>
+    layui.use(['form','layer'], function() {
+        var $ = layui.jquery,
+            layer = layui.layer,
+            form = layui.form();
+
+        var index2;
+        form.on('select(collegebtn)', function(data){
+                $.getJSON(getlessionurl+"?college_id="+data.value, function(data){
+                    var optionstring = "";
+                    if(data.data!=""){
+                    $.each(data.data, function(i,item){
+                        optionstring += "<option value=\"" + item.id + "\" >" + item.name + "</option>";
+                    });
+                    $("#lession_id").html('<option value=""></option>' + optionstring);
+                  }
+                  else{
+                    optionstring="<option value=\"" + 0 + "\" >" + "该学院下没有课程请重新选择!" + "</option>";
+                    $("#lession_id").html('<option value=""></option>' + optionstring);
+                  }
+                    form.render('select');
+                });
+          });
+
+        $('.del').on('click',function () {
+            layer.confirm('确认删除？', {
+                btn: ['确认','取消'] //按钮
+            }, function(){
+                layer.msg('ok', {icon: 1});
+            }, function(){
+                layer.msg('已取消', {
+                    time: 1000, //1s后自动关闭
+                });
+            });
+        });
+
+
+        form.verify({
+            must: function(value) {
+                if(value.length < 5 || value == null) {
+                    return '内容至少得5个字符啊';
+                }
+            }
+        });
+
+        form.on('submit(save)', function(data) {
+            $.ajax({
+                url:addurl,
+                type:"POST",
+                data:data.field,
+                timeout: 2000,
+                beforeSend: function(){
+
+                },
+                success:function(data2)
+                {
+                    if(data2.success){
+                        // 关闭当前窗口
+                        layer.msg(data2.msg, {time: 3000,icon: 1});
+                        var index = parent.layer.getFrameIndex(window.name);
+                        parent.layer.close(index);
+                    }else {
+                        layer.msg(data2.msg, {time: 3000,icon: 2});
+                    }
+                },
+                error: function(){
+                    layer.msg('添加失败!', {icon: 2});
+                }
+            });
+            return false;
+        });
+    });
+</script>
+</body>
+</html>

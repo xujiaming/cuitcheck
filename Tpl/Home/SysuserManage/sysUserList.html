@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>系统用户管理</title>
+    <layuicss/>
+    <link rel="stylesheet" href="__PUBLIC__/static/css/global.css" media="all">
+    <link rel="stylesheet" href="__PUBLIC__/static/css/collegeList.css" />
+    <icons/>
+</head>
+<body>
+
+<div class="admin-main">
+
+    <blockquote class="layui-elem-quote">
+        <a href="javascript:;" class="layui-btn layui-btn-small add">
+            <i class="layui-icon">&#xe608;</i> 添加系统用户
+        </a>
+        <a href="javascript:;" class="layui-btn layui-btn-small batchadd">
+            <i class="layui-icon">&#xe60a;</i> 批量导入
+        </a>    
+        <!--<div class="layui-input-block" style="display: inline-block;margin-left: 30px; min-height: inherit; vertical-align: bottom;">-->
+            <!--<div class="layui-form-pane">-->
+                <!--<label class="layui-form-label" style="padding: 4px 15px;">时间范围</label>-->
+                <!--<div class="layui-input-inline">-->
+                    <!--<input class="layui-input" placeholder="开始日期" id="beginDate" name="beginDate" style="height:30px; line-height:30px;" readonly="true">-->
+                <!--</div>-->
+                <!--<div class="layui-input-inline">-->
+                    <!--<input class="layui-input" placeholder="结束日期" id="endDate" name="endDate" style="height:30px; line-height:30px;"  readonly="true">-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+        <div class="layui-input-block" style="display: inline-block; margin-left: 30px; min-height: inherit; vertical-align: bottom;">
+            <input type="text" name="keyword" id="keyword" required lay-verify="keyword" class="layui-input" autocomplete="off" placeholder="请输入搜索关键词" style="height: 30px; line-height: 30px;">
+        </div>
+        <a href="javascript:;" class="layui-btn layui-btn-small" id="search">
+            <i class="layui-icon">&#xe615;</i> 搜索
+        </a>
+        <a href="javascript:;" class="layui-btn layui-btn-small" id="searchAll">
+            <i class="layui-icon">&#xe615;</i> 查看全部
+        </a>
+    </blockquote>
+    <fieldset class="layui-elem-field">
+        <legend>系统用户列表</legend>
+        <div class="layui-field-box">
+            <table class="site-table table-hover">
+                <thead>
+                <tr>
+                    <th>账号</th>
+                    <th>姓名</th>
+                    <th>性别</th>
+                    <th>手机号</th>
+                    <th>角色</th>
+                    <th>是否启用</th>
+                    <th>所属学院</th>
+                    <th >备注</th>
+                    <th>操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                <volist name="sysUserList" id="vo">
+                    <tr>
+                        <td>{$vo.account}</td>
+                        <td>{$vo.name}</td>
+                        <td><eq name="vo.sex" value="1">男<else/>女</eq></td>
+                        <!--<td><img src="{$vo.photo}" alt="{$vo.photo}" style="height:45px;width:45px;"></td>-->
+                        <td>{$vo.phone|default='无'}</td>
+                        <td>{$vo.role}</td>
+                        <td><eq name="vo.status" value="1">是<else/>否</eq></td>
+                        <td>{$vo.dept_id}</td>
+                        <td style="max-width: 100px">
+                            <div style="width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{$vo.remarks|default='无'}</div>
+                        </td>
+                        <td>
+                            <a href="javascript:;" data-id="{$vo.id}" class="layui-btn layui-btn-mini edit">编辑</a>
+                            <a href="javascript:;" data-id="{$vo.id}" data-opt="del" class="layui-btn layui-btn-danger layui-btn-mini del">删除</a>
+                            <a href="javascript:;" data-id="{$vo.id}" data-opt="" class="layui-btn layui-btn-normal layui-btn-mini resetps">重置密码</a>
+                        </td>
+                    </tr>
+                </volist>
+                </tbody>
+            </table>
+
+        </div>
+    </fieldset>
+    <div class="admin-table-page">
+        <div id="page" class="page">
+        </div>
+    </div>
+</div>
+<layuijs/>
+<script type="text/javascript">
+    var editurl = "{:U('Home/SysuserManage/editSysUser')}";
+    var addurl = "{:U('Home/SysuserManage/addSysUser')}";
+    var listurl = "{:U('Home/SysuserManage/sysUserList')}";
+    var deleteurl = "{:U('Home/SysuserManage/deleteSysUser')}";
+    var batchurl="{:U('Home/SysuserManage/importSysUserhtml')}";
+    var resetpsurl = "{:U('Home/SysuserManage/resetpwd')}";
+    var rooturl = "__ROOT__/";
+
+    var pages = "{$pages|default=''}";
+    var curr = "{$requestPage|default=''}";
+    var keyword_l = "{$keyword|default=''}";
+    var beginDate_l = "{$beginDate|default=''}";
+    var endDate_l = "{$endDate|default=''}";
+
+</script>
+<script type="text/javascript" src="__PUBLIC__/static/js/sysUserList.js"></script>
+
+</body>
+</html>

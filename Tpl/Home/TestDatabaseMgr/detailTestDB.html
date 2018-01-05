@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>知识点管理</title>
+    <layuicss/>
+    <link rel="stylesheet" href="__PUBLIC__/static/css/main.css" />
+    <link rel="stylesheet" href="__PUBLIC__/static/css/rwdgrid.min.css">
+    <link rel="stylesheet" href="__PUBLIC__/static/css/collegeList.css" />
+    <link rel="stylesheet" href="__PUBLIC__/static/css/main.css" />
+    <link rel="stylesheet" href="__PUBLIC__/static/css/global.css" media="all">
+    <style>
+        .layui-input{
+            height: 30px;
+        }
+        .my-input .layui-input{
+            height: 38px;
+        }
+        .my-input .layui-form-label{
+            width: 90px;
+        }
+        .courseList{
+            margin-top: 10px;
+        }
+        .layui-form-select{
+            width: 80%; /*     调整select的宽度*/
+        }
+
+    </style>
+</head>
+
+<body>
+<div class="admin-main">
+
+    <fieldset class="layui-elem-field">
+        <legend>题库统计</legend>
+        <div class="" style="height: 200px;padding-left: 12%">
+            <div id="chart1" class="layui-inline" style="width: 30%;height:100%;"></div>
+            <div id="chart2" class="layui-inline" style="width: 30%;height:100%; margin-left: 15%"></div>
+        </div>
+    </fieldset>
+    <fieldset class="layui-elem-field">
+        <legend>题目列表</legend>
+        <div class="container-fluid">
+            <div class="layui-input-block"></div>
+            <!--<div class="" style="background-color:#fbfbfb;height: auto;border-radius: 10px;">-->
+            <!--<div id="testDetil" class="main" style="width: 100%; min-height: 450px;"></div>-->
+            <!--</div>-->
+            <form class="layui-form" action="">
+                <blockquote class="layui-elem-quote">
+                    <a href="javascript:;" class="layui-btn layui-btn-small addSingle">
+                        <i class="layui-icon">&#xe608;</i> 添加单个题目
+                    </a>
+                    <a href="javascript:;" class="layui-btn layui-btn-small addList">
+                        <i class="layui-icon">&#xe608;</i> 导入题目
+                    </a>
+
+                    <div class=" layui-input-block" style="display: inline-block; margin-left: 2px; vertical-align: bottom;">
+                        <div class="layui-form-pane courseList">
+                            <label class="layui-form-label" style="padding: 4px 1px;">选择难度</label>
+                            <div class="layui-input-inline">
+                                <select id="level" name="level_id" lay-verify>
+                                    <option value="" selected=""></option>
+                                    <option value="1" <eq name="level" value="1">selected</eq>>简单</option>
+                                    <option value="2" <eq name="level" value="2">selected</eq>>普通</option>
+                                    <option value="3" <eq name="level" value="3">selected</eq>>困难</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class=" layui-input-block" style="display: inline-block; margin-left: 2px; vertical-align: bottom;">
+                        <div class="layui-form-pane courseList">
+                            <label class="layui-form-label" style="padding: 4px 1px;">选择题型</label>
+                            <div class="layui-input-inline">
+                                <select id="type" name="type_id" lay-verify>
+                                    <option value="" selected=""></option>
+                                    <option value="1" <eq name="type" value="1">selected</eq>>选择</option>
+                                    <option value="2" <eq name="type" value="2">selected</eq>>判断</option>
+                                    <option value="3" <eq name="type" value="3">selected</eq>>填空</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <input type="hidden" id="testdb_id" value="{$testDBId}">
+
+                    <div class="layui-input-block" style="display: inline-block; margin-left: 2px; min-height: inherit; vertical-align: bottom;">
+                        <input type="text" name="keyword" id="keyword" required lay-verify class="layui-input" autocomplete="off" placeholder="请输入搜索关键词" style="height: 30px; line-height: 30px;" value="{$keyword|default=''}">
+                    </div>
+                    <a href="javascript:;" style="display: inline-block; margin-top: 5px; margin-left: 2px; min-height: inherit; vertical-align: bottom;" class="layui-btn layui-btn-small" lay-submit lay-filter="submit2" id="search">
+                        <i class="layui-icon" >&#xe615;</i> 搜索
+                    </a>
+                    <a href="javascript:;" style="display: inline-block; margin-top: 5px; margin-left: 2px; min-height: inherit; vertical-align: bottom;" class="layui-btn layui-btn-small" id="searchAll">
+                        <i class="layui-icon">&#xe615;</i> 查看全部
+                    </a>
+                </blockquote>
+            </form>
+            <fieldset class="layui-elem-field">
+                <!--<legend>学院列表</legend>-->
+                <div class="layui-field-box">
+                    <table class="site-table table-hover">
+                        <colgroup>
+                            <col width="5%">
+                            <col width="10%">
+                            <col width="26%">
+                            <col width="10%">
+                            <col width="10%">
+                            <col width="10%">
+                            <col width="15%">
+                            <col width="10%">
+                        </colgroup>
+                        <thead>
+                        <tr>
+                            <th>id</th>
+                            <th>所属题库</th>
+                            <th>题干</th>
+                            <th>题目难度</th>
+                            <th>题目类型</th>
+                            <th>知识点</th>
+                            <th>创建时间</th>
+                            <th>操作</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <volist name="questionlist" id="vo">
+                            <tr>
+                                <td>{$vo.id}</td>
+                                <td>{$vo.testdb_id}</td>
+                                <td>{$vo.content}</td>
+                                <td>{$vo.level}</td>
+                                <td>{$vo.type}</td>
+                                <td>{$vo.knowledge_ids}</td>
+                                <td style="max-width: 100px">
+                                    <div style="width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;">{$vo.create_date}</div>
+                                </td>
+                                <td>
+                                    <a href="javascript:;" data-id="{$vo.id}" class="layui-btn layui-btn-mini edit2">编辑</a>
+                                    <a href="javascript:;" data-id="{$vo.id}" data-opt="del" class="layui-btn layui-btn-danger layui-btn-mini del2">删除</a>
+                                </td>
+                            </tr>
+                        </volist>
+                        </tbody>
+                    </table>
+
+                </div>
+            </fieldset>
+
+            <div id="page" class="page"></div>
+
+        </div>
+    </fieldset>
+
+</div>
+
+</body>
+<layuijs/>
+<script src="https://cdn.bootcss.com/echarts/3.5.2/echarts.min.js"></script>
+<script type="text/javascript">
+    var rooturl = "__ROOT__/";
+
+    var testDBId = "{$testDBId}";
+    var curr = "{$requestPage}";
+    var pages = "{$pages}";
+    var keyword = "{$keyword}";
+    var type = "{$type}";
+    var level = "{$level}";
+    var str1 = "{$str1}";
+    var str2 = "{$str2}";
+
+    var listurl = "{:U('Home/TestDatabaseMgr/detailTestDB')}";
+    var checkpermis = "{:U('Home/DetailTestDBMgr/checkaddPermiss')}";
+    var addonequs = "{:U('Home/DetailTestDBMgr/addOneQuestion')}";
+    var editqus = "{:U('Home/DetailTestDBMgr/editQuestion')}";
+    var deletequs = "{:U('Home/DetailTestDBMgr/deleteAction')}";
+    var addList = "{:U('Home/DetailTestDBMgr/uploadQuestionViews')}";
+</script>
+<script type="text/javascript" src="__PUBLIC__/static/js/detailTestDB.js"></script>
+
+
+<script>
+   
+
+        var myChart = echarts.init(document.getElementById('chart1'));
+        var myChart1 = echarts.init(document.getElementById('chart2'));
+
+        // 指定图表的配置项和数据
+        var option1 = {
+
+            tooltip: {},
+               legend: {
+                   data:['难度']
+               },
+            xAxis: {
+                data: ["简单","普通","困难"]
+            },
+            yAxis: {},
+            series: [{
+                name: '难度',
+                type: 'bar',
+                data: [{$str1}]
+            }],
+            color:['#1AA094', '#c4ccd3']
+        };
+        // 指定图表的配置项和数据
+        var option2 = {
+
+            tooltip: {},
+                legend: {
+                    data:['类型']
+                },
+
+            xAxis: {
+                data: ["选择","判断","填空"]
+            },
+            yAxis: {},
+            series: [{
+                name: '类型',
+                type: 'bar',
+                data: [{$str2}]
+            }],
+            color:['#1AA094', '#c4ccd3']
+        };
+
+        // 使用刚指定的配置项和数据显示图表。
+        myChart.setOption(option1);
+        myChart1.setOption(option2);
+
+</script>
+
+</html>

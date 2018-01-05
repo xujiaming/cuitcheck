@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <title>行课班级详情</title>
+  <layuicss/>
+  <link rel="stylesheet" href="__PUBLIC__/static/css/global.css" media="all">
+  <link rel="stylesheet" href="__PUBLIC__/static/css/collegeList.css" />
+  <style type="text/css">
+    .site-table th, .site-table td {
+    border: 1px solid #ddd;
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 20px;
+    min-height: 20px;
+    padding: 6px 95px;
+}
+  </style>
+</head>
+<body>
+      <blockquote class="layui-elem-quote">
+        <div class="layui-input-block" style="display: inline-block; margin-left: 30px; min-height: inherit; vertical-align: bottom;">
+          <input type="text" name="keyword" id="keyword" required lay-verify="keyword" class="layui-input" autocomplete="off" placeholder="请输入姓名" style="height: 30px; line-height: 30px;" value="{$keyword|default=''}">
+        </div>
+        <a href="javascript:;" class="layui-btn layui-btn-small" id="search" data-course="{$courseid}">
+          <i class="layui-icon">&#xe615;</i> 查询
+        </a>
+        <a href="javascript:;" class="layui-btn layui-btn-small" id="searchAll" data-course="{$courseid}">
+          <i class="layui-icon">&#xe615;</i> 查看全部
+        </a>
+         <a href="javascript:;" class="layui-btn layui-btn-normal layui-btn-small" id="leading_in" data-courseid="{$courseid}" style="float: left;">
+          <i class="layui-icon">&#xe621;</i> 批量导入
+        </a>
+      </blockquote>
+      <fieldset class="layui-elem-field">
+        <legend>该班学生列表</legend>
+        <div class="layui-field-box">
+          <table class="site-table table-hover">
+            <thead>
+              <tr>
+                <th>学号</th>
+                <th>姓名</th>
+                <th>性别</th>
+              </tr>
+            </thead>
+            <tbody>
+              <volist name="courseDetail" id="vo">
+              <tr>
+              <td>{$vo.account}</td>
+              <td>{$vo.name}</td>
+              <td> <if condition="$vo['sex'] eq 0 "> 女
+              <else /> 男
+             </if></td>
+              </tr>
+              </volist>
+            </tbody>
+          </table>
+        </div>
+      </fieldset>
+       <div class="admin-table-page">
+        <div id="page" class="page">
+      </div>
+      </div>
+  </div>
+<layuijs/>
+<script type="text/javascript">
+  var leading = "{:U('Home/courseclassMgr/courseLeadingIn')}";
+  var rooturl = "__ROOT__/";
+  // var pages = {$pages};
+  // var curr = {$requestPage};
+</script>
+</body>
+</html>
+<script type="text/javascript">
+layui.use(['layer','form','jquery','laypage'],function(){
+  var layer = layui.layer,
+  form = layui.form(),
+  laypage = layui.laypage,
+  $ = layui.jquery;
+   //点击搜索按钮的事件处理
+  $('#search').on('click', function() {
+     var id = $(this).data('course');
+    var keyword = $("#keyword").val();
+    var searchword = "";
+
+    if (keyword == ""){
+      layer.msg('请先输入内容', {time: 1000});
+    }else{
+        window.location.href="{:U('Home/courseclassMgr/courseDetail')}"+"?id="+id+"&keyword="+keyword+searchword;
+      
+    }
+  });
+  //所有查询事件处理
+  $('#searchAll').on('click', function(){
+     var id = $(this).data('course');
+    window.location.href="{:U('Home/courseclassMgr/courseDetail')}"+"?id="+id;
+  });
+  //导入按钮事件处理
+   $('#leading_in').on('click',function(){
+    var id = $(this).data('courseid');
+    layer.open({
+      type: 2,
+      title: ['批量导入'],
+      content: leading+"?id="+id,
+      area:['500px', '350px'],  //宽高
+      resize: false,    //是否允许拉伸
+      scrollbar: false,
+      end: function(){
+        location.reload();
+      }
+    });
+
+   });
+
+
+  })
+</script>

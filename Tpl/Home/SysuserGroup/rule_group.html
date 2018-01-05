@@ -1,0 +1,67 @@
+<layuicss/>
+<div>
+	<form class="layui-form" action="">
+	<input type="hidden" name="id" id="id" value="{$group_data['id']}">
+		<div class="layui-form-item">
+		<table class="layui-table">
+		 <tbody>
+		  <foreach name="rule_data" item="v">
+	
+		    <tr>	
+		      <td width="15%;">
+		      <input type="checkbox" class="cb_all" name="rules{$v['id']}" title="{$v['title']}" value="{$v['id']}" <if condition="in_array($v['id'],$group_data['rules'])">checked="checked"</if>>
+		      </td>
+		      <td class="111">
+		      <foreach name="v['children']" item="n">
+		      <input type="checkbox" class="cb_other" name="rules{$n['id']}" title="{$n['title']}" value="{$n['id']}" <if condition="in_array($n['id'],$group_data['rules'])">checked="checked"</if>>
+	  
+	      	  </foreach>
+	      	  </td>
+		    </tr>
+		    </foreach>
+		   </tbody>
+		</table>
+	  </div>
+	  <div class="layui-form-item">
+    <div class="layui-input-block">
+      <button class="layui-btn" lay-submit lay-filter="pushRule">提交</button>
+    </div>
+  	</div>
+	</form>
+</div>
+<layuijs/>
+<script src="__PUBLIC__/student/js/jquery-3.1.1.min.js"></script>
+<script type="text/javascript">
+</script>
+<script type="text/javascript">
+layui.use(['form','jquery'], function() {
+    var form = layui.form();
+  form.on('submit(pushRule)', function(data) {
+  	$.ajax({
+
+      url: "{:U('Home/SysuserGroup/changerule')}",
+      type: 'POST',
+      data: data.field,
+      error: function(request){
+        layer.msg("请求服务器超时", {time: 1000, icon: 5});
+      },
+      success: function(data){
+        if (data.status){
+          layer.msg('分配成功', {
+            time: 1000
+          }, function(){
+            parent.location.href="{:U('Home/SysuserGroup/sysGroupList')}";
+          });
+        }else{
+          layer.msg(data.msg, {
+            time: 1000
+          });
+        }
+      }
+    });
+    
+    return false;
+  });
+
+});
+</script>

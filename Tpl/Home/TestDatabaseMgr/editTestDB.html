@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title></title>
+	<layuicss/>
+	<style type="text/css">
+		.layui-form-select{
+			width: 80%;
+		}
+	</style>
+</head>
+<body>
+	<div style="margin: 15px;">
+		<form class="layui-form">
+			<input type="hidden" name="id" value="{$testdb.id|default=''}">
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">题库名称</label>
+				<div class="layui-input-block">
+					<input type="text" name="name" lay-verify="name" autocomplete="off" placeholder="请输入题库名称" class="layui-input" style="width:80%;" value="{$testdb.name|default=''}">
+				</div>
+			</div>
+			
+			<div class="layui-form-item">
+				<label class="layui-form-label">题库类型</label>
+					<div class="layui-input-block">
+						<select name="type_id" lay-verify="type_id">
+							<option value=""></option>
+							<volist name="typeList" id="vo">
+								<eq name="vo.value" value="$testdb.type_id">
+							    	<option value="{$vo.value}" selected>{$vo.label}</option>
+							    <else/>
+							    	<option value="{$vo.value}">{$vo.label}</option>
+							    </eq>
+							</volist>
+						</select>
+					</div>
+			</div>
+
+				<eq name="Think.session.accInfo.role" value="1">
+				<div class="layui-form-item">
+					<label class="layui-form-label">创建学院</label>
+					<div class="layui-input-block">
+						<eq name="type" value="update">
+							<select name="college_id" lay-verify="college_id" disabled>
+								<option value=""></option>
+								<volist name="collegeList" id="vo">
+									<eq name="vo.id" value="$testdb.college_id">
+								    	<option value="{$vo.id}" selected>{$vo.name}</option>
+								    <else/>
+								    	<option value="{$vo.id}">{$vo.name}</option>
+								    </eq>
+								</volist>
+							</select>
+						<else/>
+							<select name="college_id" lay-verify="college_id" lay-filter="college">
+								<option value=""></option>
+								<volist name="collegeList" id="vo">
+									<eq name="vo.id" value="$testdb.college_id">
+								    	<option value="{$vo.id}" selected>{$vo.name}</option>
+								    <else/>
+								    	<option value="{$vo.id}">{$vo.name}</option>
+								    </eq>
+								</volist>
+							</select>
+						</eq>
+					</div>
+				</div>
+			</eq>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">所属学科</label>
+				<div class="layui-input-block">
+					<select class="course_id" name="course_id" lay-verify="course_id" lay-filter="course">
+						<option value=""></option>
+						<volist name="courseList" id="vo">
+							<eq name="vo.id" value="$testdb.course_id">
+						    	<option value="{$vo.id}" selected>{$vo.name}</option>
+						    <else/>
+						    	<option value="{$vo.id}">{$vo.name}</option>
+						    </eq>
+						</volist>
+					</select>
+				</div>
+			</div>
+			
+			<div class="layui-form-item">
+				<label class="layui-form-label">所属课程</label>
+				<div class="layui-input-block">
+					<select class="lession_id" name="lession_id" lay-verify="lession_id">
+						<option value=""></option>
+						<volist name="lessionList" id="vo">
+							<eq name="vo.id" value="$testdb.lession_id">
+						    	<option value="{$vo.id}" selected>{$vo.name}</option>
+						    <else/>
+						    	<option value="{$vo.id}">{$vo.name}</option>
+						    </eq>
+						</volist>
+					</select>
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+			    <label class="layui-form-label">是否公开</label>
+			    <div class="layui-input-block">
+				    <eq name="testdb.status" value="1">
+				    	<input name="status" lay-skin="switch" lay-text="ON|OFF" type="checkbox" checked>
+				    <else/>
+				    	<input name="status" lay-skin="switch" lay-text="ON|OFF" type="checkbox">
+				    </eq>
+			    </div>
+			 </div>
+			<div class="layui-form-item">
+				<label class="layui-form-label">备注</label>
+				<div class="layui-input-block" >
+					<input type="text" name="comment" lay-verify="comment" autocomplete="off" placeholder="请输入备注（可为空）" class="layui-input" style="width:80%;" value="{$testdb.comment|default=''}">
+				</div>
+			</div>
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<button class="layui-btn" lay-submit="" lay-filter="demo1">保存</button>
+					<button type="reset" class="layui-btn layui-btn-primary">重置</button>
+				</div>
+			</div>
+
+		</form>
+	</div>
+	<layuijs/>
+	<script type="text/javascript">
+		var rooturl = "__ROOT__/";
+		var getLession = "{:U('Home/TestDatabaseMgr/getLessionByCourse')}";
+		var getCourse = "{:U('Home/TestDatabaseMgr/getCourseByCollege')}";
+		var editurl = "";
+		if ('{$type}' == 'update'){
+			editurl = "{:U('Home/TestDatabaseMgr/updateTestDB')}";
+		}else if ('{$type}' == 'add'){
+			editurl = "{:U('Home/TestDatabaseMgr/addTestDB')}";
+		}
+	</script>
+	<script type="text/javascript" src="__PUBLIC__/static/js/editTestDB.js"></script>
+</body>
+</html>

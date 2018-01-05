@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html enctype="multipart/form-data">
+<head>
+  <layuicss/>
+</head>
+<body>
+<input type="hidden" id="courseid" name="courseid" value="{$courseid}">
+<iframe id="rfFrame" name="nm_iframe" style="display:none;"></iframe>
+<div class="modal fade" id="open-import">
+	<div class="modal-dialog">
+		<div class="modal-content">
+			<div class="modal-body">
+					<blockquote class="layui-elem-quote layui-quote-nm">
+					<table align="center" cellspacing="50%">
+						<th>
+							<td  colspan="2" style="text-align: center;">注意事项</td>
+						</th>
+						<tr>
+							<td>1:</td>
+							<td>导入只需填学生学号,并且文件后缀名为xlsx或xls</td>
+						</tr>
+						<tr>
+							<td>2:</td>
+							<td>请确保所填学生信息已存在</td>
+						</tr>
+						<tr>
+							<td>3:</td>
+							<td>请确保所有必填选项均不留空</td>
+						</tr>
+						<tr>
+							<td>4:</td>
+							<td>请勿修改模板的字段顺序</td>
+						</tr>
+						<tr>
+							<td>5:</td>
+							<td>请保证你的excel文件是单sheet</td>
+						</tr>
+					</table>
+				</blockquote>
+				<div align="center">
+					<button type="button" class="layui-btn" onclick="download();"> <i class="layui-icon">&#xe61e;</i>下载模板</button>
+					<input type="file" id="up_btn" name="up_btn"  class="layui-upload-file">
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<layuijs/>
+</body>
+</html>
+<script type="text/javascript">
+		layui.use(['upload','jquery','layer'], function(){
+		var $ = layui.jquery,
+		layer=layui.layer;
+	  	layui.upload({
+	  	method:'post',
+	  	url: '{:U('Home/courseclassMgr/importCourse')}',
+	  	ext: 'xls||xlsx',
+	  	title: '上传文件',
+	  	//传文件的同时传参
+	  	before: function(input){
+ 			$('.layui-upload-file').after( '<input type="hidden" name="courseid" value="{$courseid}"/>' );
+ 			layer.msg('正在上传中！');
+ 		 },
+	  	success: function(res){
+	  		if(res['code']=='2'){
+	  			layer.open({
+	  			  type: 1,
+	  			  title:'导入结果',
+	  			  skin: 'layui-layer-1', //加上边框
+	  			  area: ['500px', '340px'], //宽高
+	  			  content: res['msg'],
+	  			});
+	  		}else{
+	  			layer.msg('导入成功');
+	  		}
+	  	  }
+	  });
+	});
+//模板文件下载
+	function download(){
+		window.open('{:U('Home/courseclassMgr/exportCourse')}');
+	}
+
+</script>

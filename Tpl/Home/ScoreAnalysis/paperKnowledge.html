@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <layuicss/>
+    <link rel="stylesheet" href="__PUBLIC__/static/css/global.css" media="all">
+
+    <link rel="stylesheet" href="__PUBLIC__/static/css/rwdgrid.min.css" media="all">
+    <link rel="stylesheet" href="__PUBLIC__/static/css/collegeList.css" media="all">
+    <style>
+        .layui-input{
+            height: 30px;
+        }
+        .my-input .layui-input{
+            height: 38px;
+        }
+        .my-input .layui-form-label{
+            width: 90px;
+        }
+        .courseList{
+            margin-top: 10px;
+        }
+        .layui-form-select{
+            width: 80%; /*     调整select的宽度*/
+        }
+        .detil-block-style{
+            padding: 15px;
+            margin: 5px;
+            border-radius: 10px;
+            display: inline-block;
+            text-align: center;
+        }
+        .detil-block-style > i{
+            color: #FF5722;
+            font-size: x-large;
+        }
+
+        .questions{
+            height: auto;
+            border:solid 1px grey;
+            border-radius: 13px;
+            -webkit-border-radius: 13px;
+            -moz-border-radius: 13px;
+            padding: 2%;
+            margin-left: 5%;
+            margin-right: 5%;
+            margin-top: 12px;
+
+            -webkit-transition: all 0.5s ease-in;
+            -moz-transition: all 0.5s ease-in;
+            -o-transition: all 0.5s ease-in;
+            transition: all 0.5s ease-in;
+        }
+        .questions:hover{
+            box-shadow: -1px 3px 18px grey;
+            -webkit-box-shadow: -1px 3px 18px grey;
+            -moz-box-shadow: -1px 3px 18px grey;
+        }
+        .layui-btn-radius{
+            border-radius: 13px;
+        }
+
+        .setfontColor span{
+            color: #000000;
+        }
+        .layui-unselect{
+            height: 30px;
+            line-height: 30px;
+            width: 100px;
+        }
+        .panel{
+            border-radius: 6px;
+            border: 1px solid #EEE;
+            margin-bottom: 20px;
+            background-color: #fff;
+        }
+        .panel-heading {
+            border-bottom: 1px solid #EEE;
+            padding: 1.4em;
+            font-size: 13px;
+            border-top-left-radius: 3px;
+            border-top-right-radius: 3px;
+            font-weight: bold;
+            clear:both;
+            overflow: hidden;
+            cursor: pointer;
+        }
+        .panel-body {
+            padding: 15px;
+            clear:both;
+            overflow: hidden;
+            display: none;
+        }
+        .pull-right {
+            float: right!important;
+        }
+    </style>
+</head>
+<body>
+
+<div class="admin-main">
+    <fieldset class="layui-elem-field layui-field-title" style="margin-top: 10px;">
+        <legend>试卷详情</legend>
+    </fieldset>
+    <blockquote class="layui-elem-quote layui-quote-nm">
+        <!--<div class="layui-inline layui-bg-gray detil-block-style"><p>总&nbsp;&nbsp;&nbsp;分</p><i>{$testPaper.full_score}</i></i></div>-->
+        <!--<div class="layui-inline layui-bg-gray detil-block-style"><p>及格分</p><i>{$testPaper.pass_score}</i></i></div>-->
+        <div class="layui-inline layui-bg-gray detil-block-style" style="margin-left: 3%;"><p>题&nbsp;&nbsp;&nbsp;量</p><i>{$testPaperQuesNum}</i></i></div>
+        <div class="layui-inline" id="detil"  style="width: 500px;height:150px; margin-left: 17%"></div>
+    </blockquote>
+    <fieldset class="layui-elem-field">
+        <legend>错误题目</legend>
+        <div class="layui-field-box">
+            <table class="site-table table-hover">
+                <thead>
+                <tr>
+                    <th>序号</th>
+                    <th>题干</th>
+                    <th>错误人数</th>
+                    <th>类型</th>
+                    <th>难度</th>
+                    <th>包含知识点</th>
+                    <!--<th>行课时间</th>-->
+                    <!--<th>操作</th>-->
+                </tr>
+                </thead>
+                <tbody>
+                <volist name="knowledge" id="vo1" key="k">
+                    <tr>
+                        <td>{$k}</td>
+                        <td>{$vo1.knowledge_info.content|htmlspecialchars_decode}</td>
+                        <td>{$vo1.false_count}</td>
+                        <td>
+                            <switch name="vo1.knowledge_info.type">
+                                <case value="1">选择</case>
+                                <case value="2">判断</case>
+                                <case value="3">填空</case>
+                                <case value="4">编程</case>
+                                <default />
+                            </switch>
+                        </td>
+                        <td>
+                            <switch name="vo1.knowledge_info.level">
+                                <case value="1">普通</case>
+                                <case value="2">一般</case>
+                                <case value="3">困难</case>
+                                <default />
+                            </switch>
+                            </td>
+                        <td><volist name="vo1.knowledges" id="vo3">
+                        <button class="layui-btn layui-btn-mini layui-btn-normal">{$vo3.name}</button>&nbsp;
+                        </volist></td>
+
+                    </tr>
+                </volist>
+                </tbody>
+            </table>
+        </div>
+    </fieldset>
+
+</div>
+
+</body>
+<layuijs/>
+<script type="text/javascript" src="__PUBLIC__/static/jsbar/echarts.min.js"></script>
+<script type="text/javascript">
+    var rooturl = "__ROOT__/";
+    var testpaper_id = "{$testpaper_id}";
+    var easyNumArray = [{:implode(',',$easyNumArray)}];
+    var normalNumArray = [{:implode(',',$normalNumArray)}];
+    var hardNumArray = [{:implode(',',$hardNumArray)}];
+</script>
+<script type="text/javascript">
+    var myChart = echarts.init(document.getElementById('detil'));
+    var option = {
+        title: {
+            text: '试卷统计'
+        },
+        tooltip: {
+            trigger: 'axis',
+            axisPointer: { // 坐标轴指示器，坐标轴触发有效
+                type: 'shadow' // 默认为直线，可选为：'line' | 'shadow'
+            }
+        },
+        legend: {
+            data: ['易题', '中等', '难题'],
+            align: 'right',
+            right: 10
+        },
+        grid: {
+            left: '3%',
+            right: '4%',
+            bottom: '3%',
+            containLabel: true
+        },
+        xAxis: [{
+            type: 'category',
+            data: ['选择', '判断', '填空', '编程']
+        }],
+        yAxis: [{
+            type: 'value',
+            name: '题量(道数)',
+            axisLabel: {
+                formatter: '{value}'
+            }
+        }],
+        series: [{
+            name: '易题',
+            type: 'bar',
+            data: easyNumArray
+        }, {
+            name: '中等',
+            type: 'bar',
+            data: normalNumArray
+        }, {
+            name: '难题',
+            type: 'bar',
+            data: hardNumArray
+        }]
+    };
+    myChart.setOption(option);
+</script>
+</html>

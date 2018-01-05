@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no">
+  <link rel="stylesheet" href="__PUBLIC__/static/layui/css/layui.css" media="all">
+  <style type="text/css">
+  .lable-box{
+    font-family: '微软雅黑';
+    font-size: 10;
+  }
+   .inputbox{
+    padding: 15px; 
+ }
+
+.layui-table {
+    background-color: #fff;
+    margin: 10px 0;
+    width: 60%;
+}
+</style>
+</head>
+<body>
+  <div style="margin: 20px;">
+  <form class="layui-form">
+<input type="hidden" name="courserclass_id" id="courserclass_id" value="{$courseclassid}">
+  <label class="layui-form-label  lable-box">测试时间:</label>
+      <div class="layui-form-pane">
+       <div class="layui-input-inline">
+         <input class="layui-input" placeholder="开始日期" id="start_time" name="start_time" style="height:30px; line-height:30px;"  readonly="true">
+         </div>
+         <div class="layui-input-inline">
+          <input class="layui-input" placeholder="结束日期" id="end_time" name="end_time" style="height:30px; line-height:30px;" readonly="true">
+        </div>
+   </div>
+  <div class="layui-form-item">
+    <label class="layui-form-label  lable-box">试卷选择:</label>
+    <div class="layui-input-block">
+  <table class="layui-table" width="500px;">
+  <thead>
+    <tr>
+      <th width="40%">试卷名</th>
+      <th width="20%">试卷总分</th>
+      <th width="20%">及格成绩</th>
+      <th width="20%">选择</th>
+    </tr> 
+  </thead>
+  <tbody>
+    <volist name="papersList" id="vo">
+    <tr>
+      <td>{$vo.name}</td>
+      <td>{$vo.full_score}</td>
+      <td>{$vo.pass_score}</td>
+      <td> 
+      <input type="radio" name="testpaper_id" id="testpaper_id" value="{$vo.id}" title="勾选">
+      </td>
+    </tr>
+  </volist>
+  </tbody>
+</table>
+   </div>
+  </div>
+  <div class="layui-form-item btn">
+    <div class="layui-input-block">
+      <button class="layui-btn" lay-submit lay-filter="test_btn">提交</button>
+      <button type="reset" class="layui-btn layui-btn-primary">重置</button>
+    </div>
+  </div>
+</form>
+</div>
+<script src="__PUBLIC__/static/layui/layui.js"></script>
+<!-- <layuijs/> -->
+</body>
+</html>
+<script type="text/javascript">
+layui.use(['form','laydate','laypage'], function(){
+  var form = layui.form(),
+   laydate = layui.laydate,
+  $ = layui.jquery;
+  form.render(); //更新全部
+  form.render('select');
+ //监听提交
+  var start = {
+    istime: true, 
+    format: 'YYYY-MM-DD hh:mm:ss', 
+    festival: false,
+      choose: function(datas){
+        end.min = datas; //开始日选好后，重置结束日的最小日期
+        end.start = datas //将结束日的初始值设定为开始日
+      }
+    };
+    
+    var end = {
+      istime: true, 
+    format: 'YYYY-MM-DD hh:mm:ss', 
+    festival: false,
+      choose: function(datas){
+        start.max = datas; //结束日选好后，重置开始日的最大日期
+      }
+    };
+    
+    document.getElementById('start_time').onclick = function(){
+      start.elem = this;
+      laydate(start);
+    }
+    document.getElementById('end_time').onclick = function(){
+      end.elem = this
+      laydate(end);
+    }
+  form.on('submit(test_btn)', function(data) {
+    var courseid = $("#id").val();
+    var start_time = $("#start_time").val();
+    var end_time = $("#end_time").val();
+     var val=$('input:radio[name="testpaper_id"]:checked').val();
+    // alert(paperid); 
+    if (start_time==''||end_time=='') {
+        layer.msg('请选择测试时间',{icon:5});
+          return false;
+    }else if(val==null) {
+          layer.msg('请选择测试试卷',{icon:5});
+          return false;
+    }
+    else{
+    $.ajax({
+
+      url:"{:U('Home/courseclassMgr/coursepaper')}",
+      type: 'POST',
+      data: data.field,
+      error: function(request){
+        layer.msg("请求服务器超时", {time: 1000, icon: 5});
+      },
+      success: function(data){
+        if (data.success){
+          layer.msg('提交成功', {
+            time: 1000
+          }, function(){
+            parent.location.href="{:U('Home/courseclassMgr/courseclassList')}";
+          });
+        }else{
+          layer.msg(data.msg, {
+            time: 1000,icon:5
+          });
+        }
+      }
+    });
+      return false;
+ }
+  });
+});
+</script>
+

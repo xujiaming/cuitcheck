@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>能力考查系统</title>
+<meta name="description" content="针对java考试和c语言考核、学生平时练习和评测、收集学生成绩以及学习情况的收集和分析的一个在线考核系统">
+<meta name="keywords" content="个人主页,编程练习">
+<link rel="stylesheet" href="__PUBLIC__/student/css/paper.css">
+<link rel="stylesheet" href="__PUBLIC__/student/css/common.css">
+
+</head>
+<body>
+<div class="box">
+	<header class="nav-bar">
+    	<div class="nav">
+        	<img src="__PUBLIC__/student/images/111.png" alt="logo">
+            <a href="#">N&nbsp;L&nbsp;K&nbsp;C</a>
+        </div>
+    </header>
+    <div class="main">
+    <div class="content">
+    	<div class="paper_nav">
+        	<h3 id="type">编程题</h3><span id="level">★★★</span>
+            <div class="demamds">
+            </div>
+        </div>
+        <div id="container"></div>
+        <div class="paper_des">
+        	<p id="content">
+            	给出一个区间[a, b]，计算区间内“神奇数”的个数。<br>
+神奇数的定义：存在不同位置的两个数位，组成一个两位数（且不含前导0），且这个两位数为质数。<br>
+比如：153，可以使用数字3和数字1组成13，13是质数，满足神奇数。同样153可以找到31和53也为质数，只要找到一个质数即满足神奇数。<br>
+            </p>
+            <ul>
+            	<li>
+                	<h3 class="paper_des_h"><span>●</span>知识点<span>1</span></h3>
+                    <p id="knowledge_ids">输入为两个整数a和b，代表[a, b]区间 (1 ≤ a ≤ b ≤ 10000)。</p>
+                </li>
+                <li>
+                	<h3 class="paper_des_h"><span>●</span>知识点<span>2</span></h3>
+                    <p id="knowledge_ids">输出为一个整数，表示区间内满足条件的整数个。</p>
+                </li>
+                <li>
+                	<h3 class="paper_des_h"><span>●</span>知识点<span>3</span></h3>
+                    <p id="knowledge_ids">a[a, b]区间 (1 ≤ a ≤ b ≤ 10000)。</p>
+                </li>
+                <li>
+                	<h3 class="paper_des_h"><span>●</span>知识点<span>4</span></h3>
+                    <p id="knowledge_ids">输入5[a, b]区间 (1 ≤ a ≤ b ≤ 10000)。</p>
+                </li>
+                <!--<li>
+                	<h3 class="paper_des_h"><span>●</span>输出描述</h3>
+                    <p>输出为一个整数，表示区间内满足条件的整数个数</p>
+                </li>
+            	<li>
+                	<h3 class="paper_des_h"><span>●</span>输入例子</h3>
+                    <p>11 20</p>
+                </li>
+                <li>
+                	<h3 class="paper_des_h"><span>●</span>输出例子</h3>
+                    <p>6</p>
+                </li>-->
+            </ul>
+            <div id="answer">
+            	<div>
+                
+                </div>
+            </div>
+            <div class="paper_footer">
+            	<input type="submit" name="next_qus" id="next_qus" value="下一题" />
+            </div>
+        </div>
+    </div>
+    </div>
+</div>
+</body>
+</html>
+<script src="__PUBLIC__/student/js/progressbar.min.js"></script>
+<script>
+	var bar = new ProgressBar.Line(container, {
+  strokeWidth: 4,
+  easing: 'easeInOut',
+  duration: 1400,
+  color: '#00B188',
+  trailColor: '#eee',
+  trailWidth: 1,
+  svgStyle: {width: '100%', height: '100%'}
+});
+
+bar.animate(0.05);  // Number from 0.0 to 1.0
+
+
+</script>
+<script src="__PUBLIC__/student/js/jquery-2.2.4.min.js"></script>

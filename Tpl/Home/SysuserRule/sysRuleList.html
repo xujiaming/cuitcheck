@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>权限管理</title>
+    <layuicss/>
+    <link rel="stylesheet" href="__PUBLIC__/static/css/global.css" media="all">
+    <link rel="stylesheet" href="__PUBLIC__/static/css/collegeList.css" />
+    <icons/>
+</head>
+<body>
+
+<div class="admin-main">
+
+    <blockquote class="layui-elem-quote">
+        <a href="javascript:;" class="layui-btn layui-btn-small add">
+            <i class="layui-icon">&#xe608;</i> 添加父权限
+        </a>
+        <div class="layui-input-block" style="display: inline-block; margin-left: 30px; min-height: inherit; vertical-align: bottom;">
+            <input type="text" name="keyword" id="keyword" required lay-verify="keyword" class="layui-input" autocomplete="off" placeholder="请输入搜索关键词" style="height: 30px; line-height: 30px;">
+        </div>
+        <a href="javascript:;" class="layui-btn layui-btn-small" id="search">
+            <i class="layui-icon">&#xe615;</i> 搜索
+        </a>
+        <a href="javascript:;" class="layui-btn layui-btn-small" id="searchAll">
+            <i class="layui-icon">&#xe615;</i> 查看全部
+        </a>
+    </blockquote>
+    <fieldset class="layui-elem-field">
+        <legend>权限列表</legend>
+        <div class="layui-field-box">
+            <table class="site-table table-hover">
+                <thead>
+                <tr>
+                    <th width="20%;">权限名称</th>
+                    <th width="40%;">权限</th>
+                    <th width="20%">状态</th>
+                    <th width="20%">操作</th>
+                </tr>
+                </thead>
+                <tbody>
+                  <foreach name="rulelst" item="v">
+                    <tr>
+                        <td style="text-align: left; padding-left: 5%;">{$v['title']}</td>
+                        <td>{$v['name']}</td>
+                        <td><eq name="v.status" value="1">已开启<else/>未开启</eq></td>
+                        <td>
+                            <a href="javascript:;" data-id="{$v['id']}" class="layui-btn layui-btn-mini layui-btn-normal sonadd">添加子权限</a>
+                            <a href="javascript:;" data-id="{$v['id']}" class="layui-btn layui-btn-mini edit">编辑</a>
+                            <a href="javascript:;" data-id="{$v['id']}" data-opt="del" class="layui-btn layui-btn-danger layui-btn-mini del">删除</a>
+                        </td>
+                    </tr>
+                      <foreach name="v['children']" item="n">
+                      <tr>
+                        <td>│---{$n['title']}</td>
+                        <td>{$n['name']}</td>
+                        <td><eq name="n.status" value="1">已开启<else/>未开启</eq></td>
+                        <td style="text-align: left; padding-left: 10%;">
+                            <a href="javascript:;" data-id="{$n['id']}" class="layui-btn layui-btn-mini edit">编辑</a>
+                            <a href="javascript:;" data-id="{$n['id']}" data-opt="del" class="layui-btn layui-btn-danger layui-btn-mini del">删除</a>
+                        </td>
+                    </tr>
+              </foreach>
+                      </foreach>
+                </tbody>
+            </table>
+
+        </div>
+    </fieldset>
+
+</div>
+<layuijs/>
+<script type="text/javascript">
+    var editurl = "{:U('Home/SysuserRule/editSysRule')}";
+    var listurl = "{:U('Home/SysuserRule/sysRuleList')}";
+    var deleteurl = "{:U('Home/SysuserRule/deleteSysRule')}";
+    var rooturl = "__ROOT__/";
+    var curr = "{$requestPage|default=''}";
+    var keyword_l = "{$keyword|default=''}";
+    var beginDate_l = "{$beginDate|default=''}";
+    var endDate_l = "{$endDate|default=''}";
+
+</script>
+</body>
+<script type="text/javascript">
+layui.use(['layer', 'laydate'], function() {
+    var $ = layui.jquery,
+        layer = layui.layer,
+        laydate = layui.laydate;
+
+    //点击搜索按钮的事件处理
+    $('#search').on('click', function() {
+        var keyword = $("#keyword").val();
+
+
+        if (keyword == ""){
+            layer.msg('请先输入内容', {time: 1000});
+        }else{
+                window.location.href=listurl+"?keyword="+keyword;
+        }
+    });
+
+    //点击分配权限的事件处理
+    $('.sonadd').on('click', function() {   
+       var id = $(this).data('id'); 
+        layer.open({
+            type: 2,
+            title: ['添加子权限', 'text-align:center;'],
+            content: editurl+"?type=sonadd&id="+id,
+            area:['400px', '300px'],  //宽高
+            resize: false,      //是否允许拉伸
+            scrollbar: false,
+                maxmin: true,
+            end: function(){
+                location.reload();
+            }
+        });
+    });
+
+
+    //点击删除按钮的事件处理
+    $('.del').on('click', function(){
+
+        var id = $(this).data('id');
+        layer.confirm('确定删除该权限?', {
+            btn: ['确定', '取消']
+        }, function(){
+            $.ajax({
+                url:deleteurl,
+                type:"POST",
+                data:{
+                    'id':id
+                },
+                success:function(data2)
+                {
+                    if(data2.success){
+                        //layer.close(index1);
+                        layer.msg('删除成功！', {time: 1000,icon: 1});
+                        location.reload();
+                    }else {
+                        layer.msg('删除失败!', {time: 1000,icon: 2});
+                    }
+                },
+                error: function(){
+                    layer.msg('请求服务器超时', {time: 1000,icon: 2});
+                }
+            });
+        },function(){});
+    });
+
+    //点击编辑按钮的事件处理
+    $('.edit').on('click', function(){
+
+        var id = $(this).data('id');
+
+        layer.open({
+            type: 2,
+            title: ['修改用户信息', 'text-align:center;'],
+            content: editurl+"?type=updaterule&id="+id,
+            area:['400px', '300px'],  //宽高
+            resize: false,      //是否允许拉伸
+            scrollbar: false,
+            end: function(){
+                location.reload();
+            }
+        });
+
+    });
+
+
+    $('.add').on('click', function(){
+
+        layer.open({
+            type: 2,
+            title: ['添加父权限', 'text-align:center;'],
+            content: editurl+"?type=addrule",
+            area:['400px', '300px'],  //宽高
+            resize: false,      //是否允许拉伸
+            scrollbar: false,
+            end: function(){
+                location.reload();
+            }
+        });
+    });
+
+    //点击查看全部的事件处理
+    $('#searchAll').on('click', function(){
+
+        window.location.href=listurl;
+    });
+
+});
+</script>
+</html>

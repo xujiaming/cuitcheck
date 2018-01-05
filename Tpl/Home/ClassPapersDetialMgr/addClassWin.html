@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>添加班级编辑窗</title>
+	<layuicss/>
+	<style type="text/css">
+		.layui-form-select{
+			width: 80%;
+		}
+	</style>
+</head>
+<body>
+	
+	<div style="margin: 15px;">
+	<form class="layui-form">
+		<input type="hidden" name="testpaper_id" value="{$testpaper_id|default=''}">
+
+		<div class="layui-form-item">
+			<label class="layui-form-label">班级</label>
+			<div class="layui-input-block">
+				<select id="class_ids" name="class_ids" multiple="multiple">
+					<option value="" selected=""></option>
+					<volist name="allClassList" id="vo">
+                      	<option value="{$vo['id']}"  <in name="vo.id" value="$classList_ids">selected</in> >{$vo.name}</option>
+                    </volist>
+				</select>
+			</div>
+		</div>
+
+		<div class="layui-form-item">
+				<label class="layui-form-label">开始时间</label>
+				<div class="layui-input-block">
+					<input class="layui-input" placeholder="开始日期" id="start_time" name="start_time" lay-verify="start_time" style="width:80%;"  value="{$start_time|default=''}" readonly="true" <eq name="status" value="1">disabled</eq>>
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<label class="layui-form-label">结束时间</label>
+				<div class="layui-input-block">
+					<input class="layui-input" placeholder="结束日期" id="end_time" name="end_time" lay-verify="end_time" style="width:80%;"  value="{$end_time|default=''}" readonly="true" <eq name="status" value="1">disabled</eq>>
+				</div>
+			</div>
+
+			<div class="layui-form-item">
+				<div class="layui-input-block">
+					<button class="layui-btn" lay-submit="" lay-filter="demo1">保存</button>
+					<button type="reset" class="layui-btn layui-btn-primary reset">重置</button>
+				</div>
+			</div>
+	</form>
+	</div>
+
+</body>
+<layuijs/>
+<script type="text/javascript" src="__PUBLIC__/static/js/layui-mz-min.js"></script>
+<script type="text/javascript">
+	var rooturl = "__ROOT__/";
+	var addurl = "{:U('Home/ClassPapersDetialMgr/addClass')}";
+</script>
+<script type="text/javascript" src="__PUBLIC__/static/js/addClassWin.js"></script>
+</html>

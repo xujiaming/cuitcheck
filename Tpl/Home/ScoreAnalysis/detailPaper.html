@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>试卷详情</title>
+    <layuicss/>
+    <link rel="stylesheet" href="__PUBLIC__/static/css/global.css" media="all">
+    <link rel="stylesheet" href="__PUBLIC__/static/css/collegeList.css" />
+</head>
+<body>
+<div class="admin-main">
+    <div>
+        <fieldset class="layui-elem-field">
+            <div class="layui-field-box">
+                <blockquote class="layui-elem-quote layui-quote-nm">试卷名称：<span style="margin-left: 5px;font-size: 1.1em;font-weight: bold">{$paperName}</span></blockquote>
+            </div>
+            <div class="layui-field-box">
+                <table class="site-table table-hover">
+                    <thead>
+                    <tr>
+                        <th>使用班级</th>
+                        <th>任课老师</th>
+                        <th>总人数</th>
+                        <th>参考人数</th>
+                        <th>开始时间</th>
+                        <th>结束时间</th>
+                        <!--<th>操作</th>-->
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <volist name="paperList" id="pl">
+                        <tr>
+                            <td>{$pl.coursename}</td>
+                            <td>{$pl.name}</td>
+                            <td>{$pl.totalstu}</td>
+                            <td>{$pl.factstu}</td>
+                            <td>{$pl.start_time}</td>
+                            <td>{$pl.end_time}</td>
+                            <!--<td><a href="javascript:;" data-id="{$pl.id}" data-courseid="{$pl.courserclass_id}" class="layui-btn layui-btn-mini detail">查看详情</a></td>-->
+                        </tr>
+                    </volist>
+                    </tbody>
+                </table>
+            </div>
+        </fieldset>
+    </div>
+    <div class="" style="margin-left: 38%;position: static;bottom: 0;">
+        <div id="page" ></div>
+    </div>
+</div>
+<layuijs/>
+<script>
+    var rooturl = "__ROOT__/";
+    var listurl = "{:U('Home/ScoreAnalysis/detailPaper')}";
+    var pages = "{$pages}";
+    var curr = "{$requestPage}";
+    var paperId = "{$paperId}";
+</script>
+<script>
+    layui.config({
+        base: rooturl+'Public/static/js/'
+    }).use(['layer','laypage'], function() {
+        laypage = layui.laypage;
+        laypage({
+            cont: 'page',
+            pages: pages,
+            groups: 5,
+            //skip: true, //是否开启跳页
+            curr: curr,
+            jump: function(obj, first) {
+                var curr = obj.curr;
+                if(!first) {
+                    window.location.href = listurl+"?requestPage="+curr+"&id="+paperId;
+                }
+            }
+        });
+    });
+</script>
+</body>
+</html>

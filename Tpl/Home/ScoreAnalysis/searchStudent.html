@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>结果详情</title>
+    <layuicss/>
+    <link rel="stylesheet" href="__PUBLIC__/static/css/global.css" media="all">
+    <link rel="stylesheet" href="__PUBLIC__/static/css/collegeList.css" />
+</head>
+<body>
+<div class="admin-main">
+    <div>
+        <fieldset class="layui-elem-field">
+            <div class="layui-field-box">
+                <blockquote class="layui-elem-quote layui-quote-nm">
+                    <button class="layui-btn layui-btn-small layui-btn-normal returnLast" style="margin-left:2px;margin-right: 20px;">
+                        <i class="layui-icon">&#xe603;</i>返回上级
+                    </button>
+                    <a href="javascript:;" class="layui-btn layui-btn-small export" style="margin-left: 100px;vertical-align: top;background-color: #3b83c0">
+                        <i class="layui-icon">&#xe601;</i> 导出该学生成绩
+                    </a>
+                </blockquote>
+            </div>
+
+            <div class="layui-field-box">
+                <legend>结果详情</legend>
+            </div>
+            <div class="layui-field-box">
+                <table class="site-table table-hover">
+                    <thead>
+                    <tr>
+                        <th>学号</th>
+                        <th>姓名</th>
+                        <th>试卷名称</th>
+                        <th>学生班级</th>
+                        <th>分数</th>
+                        <th>成绩记录时间</th>
+                        <!--<th>操作</th>-->
+                    </tr>
+                    </thead>
+                    <tbody>
+                    <notempty name="studentScore">
+                    <volist name="studentScore" id="ss">
+                        <tr>
+                            <td>{$ss.account}</td>
+                            <td>{$ss.stuname}</td>
+                            <td>{$ss.papername}</td>
+                            <td>{$ss.classname}</td>
+                            <td>{$ss.score}</td>
+                            <td>{$ss.create_date}</td>
+                            <!--<td></td>-->
+                            <!--<td><a href="javascript:;" data-id="{$pl.id}" data-courseid="{$pl.courserclass_id}" class="layui-btn layui-btn-mini detail">查看详情</a></td>-->
+                        </tr>
+                    </volist>
+                        <else/>
+                        <tr><td colspan="6">暂时未找到数据！</td></tr>
+                        </notempty>
+                    </tbody>
+                </table>
+            </div>
+        </fieldset>
+    </div>
+    <div class="" style="margin-left: 38%;position: static;bottom: 0;">
+        <div id="page" ></div>
+    </div>
+</div>
+<layuijs/>
+<script>
+    var rooturl = "__ROOT__/";
+    var listurl = "{:U('Home/ScoreAnalysis/detailPaper')}";
+    var returnurl = "{:U('Home/ScoreAnalysis/studentScore')}";
+    var pages = "{$pages}";
+    var curr = "{$requestPage}";
+    var paperId = "{$paperId}";
+    var stuId = "{$studentScore[0]['stuid']}";
+    var exporturl = "{:U('Home/ScoreAnalysis/exportScore')}";
+</script>
+<script>
+    layui.config({
+        base: rooturl+'Public/static/js/'
+    }).use(['layer','laypage'], function() {
+        $ = layui.jquery,
+        laypage = layui.laypage;
+        laypage({
+            cont: 'page',
+            pages: pages,
+            groups: 5,
+            //skip: true, //是否开启跳页
+            curr: curr,
+            jump: function(obj, first) {
+                var curr = obj.curr;
+                if(!first) {
+                    window.location.href = listurl+"?requestPage="+curr+"&id="+paperId;
+                }
+            }
+        });
+        $('.returnLast').on('click', function() {
+            window.location.href = returnurl;
+        });
+        $('.export').on('click', function() {
+            var index3 = layer.confirm('确定导出成绩吗?', {
+                btn: ['确定', '取消']
+            }, function(){
+                window.open(exporturl+"?stuId="+stuId);
+                layer.close(index3);
+            });
+        });
+    });
+</script>
+</body>
+</html>

@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+ <meta http-equiv="X-UA-Compatible" content="IE=edge">
+<title></title>
+ <layuicss/>
+ <link rel="stylesheet" href="__PUBLIC__/static/css/global.css" media="all">
+ <link rel="stylesheet" href="__PUBLIC__/static/css/collegeList.css" />
+</head>
+<body>
+<center><h3 style="font-size: 20px;">{$informShow.title}</h3></center>
+<input type="hidden" name="id" id="id" value="{$informShow.id}">
+<p style="float: left; margin-top: 20px; text-align: center;"><span style="margin-left: 120px;"></span>来源:{$informShow.dept_name}<span style="margin-left: 20px;"></span>发布人:{$informShow.greateby}<span style="margin-left: 20px;"></span>发布时间:{$informShow.greatedate}</p><center>
+<hr style="width: 80%;">
+</center>
+<br>
+<p>
+<pre>
+<span style="margin-left: 20px;"><span style="margin-left: 120px;"></span><?php echo htmlspecialchars_decode($informShow['content']) ?></span>
+</pre>
+</p>
+<p style="float: right; margin-right: 80px;"><a href="{:U('Home/InformMgr/informdown')}?id={$informShow.id}" title="附件下载">{$informShow.file_name}</a></p>
+</body>
+<layuijs/>
+</html>

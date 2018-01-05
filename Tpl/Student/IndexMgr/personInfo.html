@@ -1,0 +1,89 @@
+
+	<div class="at-content">
+				<div class="module-box">
+					
+					<div class="module-body">
+						<div class="info-box">
+							<div class="profile-caption">
+								<h4 class="ui horizontal header divider">
+									<i class="edit icon"></i>
+									个人信息
+								</h4>
+							</div>
+						</div>
+						<!--<div class="nl-personType">-->
+							<!--<div class="blue ui buttons">-->
+								<!--<div class="ui button">基本信息</div>-->
+								<!--<div class="ui button">密码信息</div>-->
+							<!--</div>-->
+						<!--</div>-->
+
+						<form>
+						<input type="hidden" name="id" id="id" value="{$person.id}">
+							<div class="info-edit">
+								<div class="nl-personInfoform">
+									<dl>
+										<dt><i class="fa fa-user fa-fw"></i>&nbsp;姓名</dt>
+										<dd>
+											<input type="text" id="name" name="name" disabled="true" value="{$person.name}">
+										</dd>
+									</dl>
+									<dl>
+										<dt><i class="fa fa-venus-mars fa-fw"></i>&nbsp;性别</dt>
+											<dd>
+										<if condition="$person['sex'] eq  1">
+											<input class="gender-edit" type="radio" name="sex" id="sex" value="1" disabled="true" checked > 男
+											<input class="gender-edit" type="radio" name="sex" id="sex" disabled="true" value="0" > 女
+									    <else />
+											<input class="gender-edit" type="radio" name="sex" id="sex" disabled="true" value="1"> 男
+											<input class="gender-edit" type="radio" name="sex" id="sex" disabled="true" value="0" checked> 女								
+										</if>
+											</dd>
+									</dl>
+									<dl>
+										<dt><i class="fa fa-building-o fa-fw"></i>&nbsp;学院</dt>
+										<dd>
+											<input type="text" id="account" name="dept" disabled="true" value="{$person.college_name}">
+										</dd>
+									</dl>
+									<dl>
+										<dt><i class="fa fa-Map Signs fa-fw"></i>&nbsp;专业</dt>
+										<dd>
+											<input type="text" id="major" name="major" disabled="true" value="{$person.major_name}">
+										</dd>
+									</dl>
+									<dl>
+										<dt><i class="fa fa-database fa-fw"></i>&nbsp;年级</dt>
+										<dd>
+											<input type="text" id="2" name="grade" disabled="true" value="{$person.grade_name}">
+										</dd>
+									</dl>
+									<dl>
+										<dt><i class="fa fa-home fa-fw"></i>&nbsp;班级</dt>
+										<dd>
+											<input type="text" id="1" name="class" disabled="true" value="{$person.class_name}">
+										</dd>
+									</dl>
+									<dl>
+										<dt><i class="fa fa-mobile fa-fw"></i>&nbsp;联系方式</dt>
+										<dd>
+											<input type="text" id="phone" name="phone" value="{$person.phone}">
+										</dd>
+									</dl>
+									<dl>
+										<dt><i class="fa fa-envelope-open-o fa-fw"></i>&nbsp;邮箱</dt>
+										<dd>
+											<input type="text" id="email" name="email" value="{$person.email}">
+										</dd>
+									</dl>
+								</div>
+
+								<button class="edit_btn" id="btn">保存</button>
+							</div>
+
+						</form>
+					</div>
+
+				</div>
+			</div>
+

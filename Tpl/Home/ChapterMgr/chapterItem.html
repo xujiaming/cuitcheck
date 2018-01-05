@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title></title>
+    <style>
+        .layui-form-select{
+            /*width: 80%;     //调整select的宽度*/
+        }
+        .center{
+            margin-left: 9%;
+        }
+    </style>
+</head>
+
+
+<body>
+<div class="admin-main" style="width: 100%">
+
+    <div style="">
+        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;margin-left: 42%;border:1px;">
+            <legend>{$info.name}</legend>
+        </fieldset>
+
+        <form class="layui-form center" enctype="multipart/form-data" action="">
+            <div class="layui-form-item">
+                <label class="layui-form-label">名称:</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="title" lay-verify="title" autocomplete="off" placeholder="请输入内容" class="layui-input"  value="{$info.name}" disabled>
+                </div>
+                <label class="layui-form-label">所属课程:</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="name" lay-verify="title" autocomplete="off" placeholder="请输入内容" class="layui-input"  value="{$info.lessionname}" disabled>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">排序号 (章节顺序):</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="email" lay-verify="title" autocomplete="off" placeholder="请输入内容" class="layui-input"  value="{$info.sortnumber}" disabled>
+                </div>
+
+                <label class="layui-form-label">创建时间:</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="role" lay-verify="title" autocomplete="off" placeholder="请输入内容" class="layui-input"  value="{$info.create_date}" disabled>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">注解 (章节辅助说明):</label>
+
+                <div class="layui-input-inline">
+                    <textarea name="desc" placeholder="" class="layui-textarea" value="">{$info.comment}</textarea>
+                    <!--<input type="text" name="dept_id" lay-verify="title" autocomplete="off" placeholder="请输入内容" class="layui-input"  value="{$info.comment}" disabled>-->
+                </div>
+            </div>
+
+
+            <div class="layui-form-item">
+                <!--<label class="layui-form-label"> </label>-->
+                <!--<div class="layui-input-inline">-->
+                    <!--<div class="layui-btn" id="konwledgeDetail" style=" " data-id="{$info.id}">知识点详情</div>-->
+                <!--</div>-->
+                <label class="layui-form-label"> </label>
+                <div class="layui-input-inline">
+                    <div class="layui-btn" id="fixChapter" style=" ">修  改</div>
+                </div>
+                <label class="layui-form-label"> </label>
+                <div class="layui-input-inline">
+                    <div class="layui-btn" id="deleteChapter" data-id="{$info.id}" style=" ">删  除</div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="window1" style="display: none;margin-top: 20px;">
+    <form class="layui-form " method="post" action="">
+        <input type="hidden" name="id" lay-verify="id" autocomplete="off" placeholder="" class="layui-input"  value="{$info.id}">
+        <div class="layui-form-item">
+            <label class="layui-form-label">名称:</label>
+            <div class="layui-input-inline">
+                <input type="text" name="name" lay-verify="title" autocomplete="off" placeholder="请输入内容" class="layui-input" value="{$info.name}">
+            </div>
+        </div>
+
+        <!--<div class="layui-form-item">-->
+            <!---->
+            <!--<label class="layui-form-label">所属课程:</label>-->
+            <!--<div class="layui-input-inline">-->
+                <!--<select name="course_id"  id="roleSelect">-->
+                    <!--<foreach name="course" item="vo">-->
+                        <!--<eq name="vo.id" value="$info.course_id">-->
+                            <!--<option value="{$vo.id}"  selected="">{$vo.name}</option>-->
+                            <!--<else/>-->
+                            <!--<option value="{$vo.id}"  >{$vo.name}</option>-->
+                        <!--</eq>-->
+                    <!--</foreach>-->
+                <!--</select>-->
+            <!--</div>-->
+
+        <!--</div>-->
+
+        <div class="layui-form-item">
+            <label class="layui-form-label">排序号:</label>
+            <div class="layui-input-inline">
+                <input type="text" name="sortnumber" lay-verify="sort" autocomplete="off" placeholder="请输入内容" class="layui-input"  value="{$info.sortnumber}">
+                <div class="layui-form-mid layui-word-aux">章节顺序(如是第七章：7)</div>
+            </div>
+
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">注解:</label>
+            <div class="layui-input-inline">
+                <input type="text" name="comment"  autocomplete="off" placeholder="请输入内容(可为空)" class="layui-input"  value="{$info.comment}">
+                <div class="layui-form-mid layui-word-aux">指章节辅助说明</div>
+            </div>
+
+        </div>
+
+        <div class="layui-form-item">
+            <label class="layui-form-label"> </label>
+            <div class="layui-input-inline">
+                <div type="button" class="layui-btn" id="sureChapter" lay-submit="" lay-filter="submit1">提交</div>
+            </div>
+        </div>
+    </form>
+</div>
+
+
+</body>
+<script>
+    var konwledgeUrl = "{:U('Home/KnowledgeMgr/knowledgeList')}";
+</script>
+<script>
+    layui.use(['form','layer'],function (){
+        var $ = layui.jquery,
+            layer = layui.layer,
+            form = layui.form();
+
+        var index1;
+        form.render();
+
+        form.verify({
+            title: function(value) {
+                if(value.length < 1 || value == null) {
+                    return '内容至少得1个字符啊';
+                }
+                if(value.length > 18) {
+                    return '最多18个字符'
+                }
+            },
+            sort: function(value) {
+                if(value.length < 1 || value == null) {
+                    return '内容至少得1个字符啊';
+                }
+            }
+        });
+//        $('#konwledgeDetail').on('click', function() {
+//            var chapter_id = $(this).data('id');
+//            window.location.href = konwledgeUrl+"?chapter_id="+chapter_id;
+//        });
+        $('#fixChapter').on('click',function() {
+            index1 = layer.open({
+                type: 1,
+                skin: 'layui-layer-rim', //加上边框
+                area: ['350px', '400px'], //宽高
+                content: $('.window1'),
+                end: function (){
+//                    window.location.reload();
+                }
+            });
+        });
+
+        $('#deleteChapter').on('click',function () {
+            var chapter_id = $(this).data('id');
+            layer.confirm('确认删除？', {
+                btn: ['确认','取消'] //按钮
+            }, function(){
+                $.ajax({
+                    url:"{:U('Home/ChapterMgr/deleteChapter')}",
+                    type:"POST",
+                    data:{
+                        'chapter_id':chapter_id
+                    },
+                    beforeSend: function(){
+                        //
+                    },
+                    success:function(data2)
+                    {
+                        if(data2.success){
+                            layer.msg(data2.msg, {time: 2000,icon: 1});
+                            location.reload();
+                        }else {
+                            layer.msg(data2.msg, {time: 1000,icon: 2});
+                        }
+                    },
+                    error: function(){
+                        layer.msg('请求服务器超时', {time: 1000,icon: 2});
+                    }
+                });
+            }, function(){
+
+            });
+        });
+
+        form.on('submit(submit1)', function(data){
+            layer.confirm('确认修改？', {
+                btn: ['确认','取消'] //按钮
+            }, function(){
+
+                $.ajax({
+                    url:"{:U('Home/ChapterMgr/updateChapter')}",
+                    type:"POST",
+                    data:data.field,
+                    beforeSend: function(){
+                        //
+                    },
+                    success:function(data2)
+                    {
+                        if(data2.success){
+                            layer.msg(data2.msg, {time: 1000,icon: 1},function(){
+                                layer.close(index1);
+                                window.location.reload();
+                            });
+                        }else {
+                            layer.msg(data2.msg, {time: 1000,icon: 2});
+                        }
+                    },
+                    error: function(){
+                        layer.msg('请求服务器超时', {time: 1000,icon: 2});
+                    }
+                });
+                return false;
+            }, function(){
+                layer.msg('not ok！', {icon: 1});
+            });
+        });
+
+    });
+
+</script>
+</html>

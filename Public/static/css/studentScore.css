@@ -1,0 +1,31 @@
+.body-main {
+
+}
+.sign-diver {
+   margin: 2% 2%;
+}
+.main-content {
+    margin: 2% 2%;
+}
+.stepStyle {
+    margin-left: 2%;
+    margin-top: 3%;
+
+}
+.searchInput {
+    margin-left: 37%;
+    margin-top: 30px;
+}
+.inputStyle {
+    width: 270px;
+    border-radius: 30px;
+}
+.pictureStyle {
+    margin-left: 20px;
+    margin-top: 80px;
+    width: 100%;
+    height: 500px;
+}
+
+
+/*下拉多选*/

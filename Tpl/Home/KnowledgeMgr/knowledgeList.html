@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>知识点管理</title>
+    <layuicss/>
+    <link rel="stylesheet" href="__PUBLIC__/static/css/global.css" media="all">
+    <link rel="stylesheet" href="__PUBLIC__/static/css/collegeList.css" />
+    <link rel="stylesheet" href="__PUBLIC__/static/css/rwdgrid.min.css">
+    <icons/>
+    <style>
+        .layui-input{
+            height: 30px;
+            width: 140px;
+        }
+        .my-input .layui-input{
+                height: 38px;
+        }
+        .my-input .layui-form-label{
+            /*width: 140px;*/
+        }
+        .courseList{
+            margin-top: 10px;
+        }
+         .layui-form-select{
+             width: 80%; /*     调整select的宽度*/
+         }
+        .layui-tree li a cite {
+            padding: 0 6px;
+            font-size: 12px;
+        }
+        .notice {
+            display: none;
+            float: left;
+            height: 75px;
+            width: 330px;
+            overflow: hidden;
+            background: #5FB878;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        .notice span {
+            padding-top:50%;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+<div class="admin-main">
+    <blockquote class="layui-elem-quote">
+        <form class="layui-form" action="" style="display: inline-block;margin-left: 6px; min-height: inherit; vertical-align: bottom;">
+        <!--<a href="javascript:;" class="layui-btn layui-btn-small addSingle">-->
+            <!--<i class="layui-icon">&#xe608;</i> 添加知识点-->
+        <!--</a>-->
+        <if condition="$select_show eq true">
+            您当前所查看的学院是：
+            <span style="margin-left: 5px;font-size: 1.1em;">
+
+            <div class="layui-input-inline theSelect" style="height: 30px;width: 140px;">
+                <select name=""  placeholder="Select Task Type" id="demo-col">
+                    <volist name="collegeList" id="col">
+                    <option value="{$col.id}" >{$col.name}</option>
+                    </volist>
+                </select>
+            </div>
+                <a href="javascript:;" class="layui-btn layui-btn-small cut">
+                    <i class="layui-icon">&#xe623;</i> 切换学院
+                </a>
+            </span>
+            <else />
+        </if>
+        <a href="javascript:;" class="layui-btn layui-btn-small addList">
+            <i class="layui-icon">&#xe608;</i> 导入知识点
+        </a>
+
+        <!--<div class=" layui-input-block" style="display: inline-block; margin-left: 30px; vertical-align: bottom;">-->
+            <!--<div class="layui-form-pane courseList">-->
+                <!--<label class="layui-form-label" style="padding: 4px 1px;">选择课程</label>-->
+                <!--<div class="layui-input-inline">-->
+                    <!--<select name="course_id" lay-verify="">-->
+                        <!--<option value="" >选择课程</option>-->
+                        <!--<volist name="course" id="vo">-->
+                            <!--<option value="{$vo.id}" >{$vo.name}</option>-->
+                        <!--</volist>-->
+                        <!--<option value="" >无</option>-->
+                    <!--</select>-->
+                <!--</div>-->
+            <!--</div>-->
+        <!--</div>-->
+
+        <div class="layui-input-block" style="display: inline-block; margin-left: 30px; min-height: inherit; vertical-align: bottom;">
+            <input type="text" name="keyword" id="keyword" lay-verify class="layui-input" autocomplete="off" placeholder="请输入搜索关键词" style="height: 30px; line-height: 30px;">
+        </div>
+
+        <a href="javascript:;" class="layui-btn layui-btn-small" lay-submit lay-filter="submit2" id="search">
+            <i class="layui-icon" >&#xe615;</i> 搜索
+        </a>
+        <a href="javascript:;" class="layui-btn layui-btn-small" id="searchAll">
+            <i class="layui-icon">&#xe615;</i> 查看全部
+        </a>
+    </form>
+    </blockquote>
+
+    <fieldset class="layui-elem-field">
+        <legend>知识点列表</legend>
+        <div class="container-fluid">
+            <div class="grid-4">
+                <ul id="chapterTree" style="background-color:#fbfbfb;border-radius: 10px;">
+                    <span style="font-size: 0.8em;color: #2795e9">*小提示：一级为学科，二级为课程，三级为章节</span>
+                </ul>
+            </div>
+            <div class="grid-8" style="background-color:#fbfbfb;height: auto;border-radius: 10px;">
+                <div id="knowledgeItem" style="width: 100%; min-height: 450px;">
+                    <div class="" style="margin-left: 10%;margin-top: 30%">
+                        <fieldset class="layui-elem-field layui-field-title" style="margin-top: 20px;margin-left: 25%;border:1px;">
+                            <legend>请选择点击左侧章节或者课程进行查看 知识点 详细信息</legend>
+                        </fieldset>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </fieldset>
+
+</div>
+<!--<div style="display: none" id="windows1">-->
+        <!--<form class="layui-form">-->
+            <!--<div class="layui-form-item">-->
+                <!--<label class="layui-form-label">名称</label>-->
+                <!--<div class="layui-input-block">-->
+                    <!--<input type="text" name="name" lay-verify="title" autocomplete="on" placeholder="知识点名" class="layui-input" style="width:80%;"  value="">-->
+                <!--</div>-->
+            <!--</div>-->
+
+            <!--<div class="layui-form-item">-->
+                <!--<label class="layui-form-label">所属章节</label>-->
+                <!--<div class="layui-input-block">-->
+                    <!--<select name="chapter_id" lay-verify="chapter">-->
+                        <!--<option value="">请选择章节</option>-->
+
+                        <!--<volist name="chapter" id="vo">-->
+                            <!--<optgroup label="{$vo.name}">-->
+                                <!--<volist name="vo.children" id="vo2">-->
+                                   <!--<option value="{$vo2.id}"  >{$vo2.name}</option>-->
+                                <!--</volist>-->
+                            <!--</optgroup>-->
+                        <!--</volist>-->
+
+                    <!--</select>-->
+                <!--</div>-->
+            <!--</div>-->
+
+            <!--<div class="layui-form-item">-->
+                <!--<label class="layui-form-label">备注</label>-->
+                <!--<div class="layui-input-block">-->
+                    <!--<input type="text" name="comment" maxlength="25" lay-verify="title" autocomplete="off" placeholder="最多25字" class="layui-input" style="width:80%;" value="{$sysuser.remarks|default=''}">-->
+                <!--</div>-->
+            <!--</div>-->
+
+            <!--<div class="layui-form-item">-->
+                <!--<div class="layui-input-block">-->
+                    <!--<button class="layui-btn" lay-submit="" lay-filter="demo3">保存</button>-->
+                    <!--<button type="reset" class="layui-btn layui-btn-primary">重置</button>-->
+                <!--</div>-->
+            <!--</div>-->
+
+        <!--</form>-->
+<!--</div>-->
+</body>
+<div class="notice">
+    <div class="" style="margin-top: 5%;margin-left: 12px;">
+        <span>请点击课程或者章节，您点击的是学科哦！</span>
+    </div>
+</div>
+<layuijs/>
+<script>
+    var editurl = "{:U('Home/KnowledgeMgr/editKnowledge')}";
+    var updateurl = "{:U('Home/KnowledgeMgr/updateKnowledge')}";
+    var listurl = "{:U('Home/KnowledgeMgr/knowledges')}";
+    var addurl = "{:U('Home/KnowledgeMgr/addKnowledge')}";
+    var deleteurl = "{:U('Home/KnowledgeMgr/deleteKnowledge')}";
+    var importurl = "{:U('Home/KnowledgeMgr/showImportKnow')}";
+    var rooturl = "__ROOT__/";
+</script>
+<script type="text/javascript" src="__PUBLIC__/static/js/knowledgeList.js"></script>
+</html>
