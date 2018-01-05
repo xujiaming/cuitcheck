@@ -1,22 +1,33 @@
 .headerBox{
-    margin-bottom:50px;
+    /*margin-bottom:50px;*/
     width:100%;
     height:50px;
     background-color: #FFFFFF;
     border-bottom: 1px solid #D1D4D6;
 }
 .headerBox{
+    position:fixed;
+    top:0px;
+    z-index:10;
     padding-left: 8%;}
 .headerBox img{
     display:inline-block; width:26px; height:26px;}
 .headerBox a{
     display:inline-block; font-size:20px; margin-left:20px; color:black;text-align: center;margin-top: 1%;}
 .nl-logout {
+     position: relative;
+     float: right;
+     height: 70%;
+     margin-top: 6px;
+     padding-right: 10px;
+     text-align: center;
+ }
+.nl-change {
     position: relative;
     float: right;
     height: 70%;
     margin-top: 6px;
-    padding-right: 10px;
+    /*padding-right: 10px;*/
     text-align: center;
 }
 /**foot***/

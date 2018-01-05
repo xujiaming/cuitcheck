@@ -4,11 +4,39 @@
     <link href="__PUBLIC__/student/font-awesome/css/font-awesome.min.css" rel="stylesheet">
 
 </head>
+<style>
+    .course-label{
+        padding: 0px;
+        margin-top: 8px;
+    }
+    .layui-input{	/*调节input框的大小*/
+        margin-top: 6px;
+        height: 25px;
+    }
+</style>
 <div class="headerBox">
     <img src="__PUBLIC__/student/images/logo.png" alt="logo">
     <a href="#" class="nl-sign">NLKH &nbsp;&nbsp;&nbsp;能力考核系统（学生）</a>
+
+
     <div class="nl-logout">
-        <button class="ui teal button" id="loginout" name="loginout"><i class="fa fa-sign-out fa-fw"></i>&nbsp;退出</button> 
+        <button class="ui teal button" id="loginout" name="loginout"><i class="fa fa-sign-out fa-fw"></i>&nbsp;退出</button>
     </div>
+
+    <div class="nl-change">
+        <form action="" class="layui-form">
+            <div class="layui-form-item">
+                <label class="layui-form-label course-label" >切换课程</label>
+                <div class="layui-input-inline" style="margin-left: 5px">
+                    <select name="city" id="city" style="height: 10px;">
+                        <option value="">请选择一个课程</option>
+                        <option value="010">java</option>
+                        <option value="021">c++</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+
 </div>
 
